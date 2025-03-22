@@ -50,7 +50,7 @@
 \usepackage{tabularx}           % Para tabelas
 \usepackage[brazilian,hyperpageref]{backref}
 \usepackage{breakcites}         % Quebra as referências para uma nova linha se necessário
-\usepackage[abnt-emphasize=bf, alf, abnt-full-initials=no, abnt-etal-list=3, abnt-etal-text=it]{abntex2cite} % Citações padrão ABNT
+\usepackage[abnt-emphasize=bf, alf, abnt-full-initials=no, abnt-etal-list=3, abnt-etal-text=it,abnt-nbr10520=1988]{abntex2cite} % Citações padrão ABNT com adição de abnt-nbr10520=1988 para adequação as novas regras de citação
 \usepackage{parskip}            % espaçamento entre os parágrafos
 \usepackage{xcolor}
 \usepackage{listings}
@@ -60,6 +60,7 @@
 \usepackage[final]{pdfpages} % Incluir PDFs em texto
 
 \usepackage{xparse}             % Mais de um argumento opcional nos macros
+
 
 %% Flush captions to left
 \hangcaption
@@ -272,6 +273,7 @@
 
   \begin{center}
     \MakeUppercase\imprimirinstituicao\\
+    \MakeUppercase\imprimircampus\\ % Adição do Campus para estar de acordo com o template do IFES Vila Velha
     \MakeUppercase\imprimircurso
     \vspace*{3.0cm}
 
@@ -281,7 +283,7 @@
     \textbf{\MakeUppercase\imprimirtitulo}
     \vfill
   
-    \imprimirlocal\\
+    \MakeUppercase\imprimirlocal\\ % Adição de Uppercase para estar conforme o template do IFES Vila Velha
     \imprimirdata
   \end{center}
 
@@ -322,7 +324,7 @@
   \vfill
   
   \begin{center}
-    \imprimirlocal\\
+    \MakeUppercase\imprimirlocal\\  % Adição de Uppercase para estar conforme o template do IFES Vila Velha
     \imprimirdata
   \end{center}
 

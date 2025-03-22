@@ -1,3 +1,41 @@
 \chapter[Introdução]{Introdução}
 
-Na introdução deve-se fazer a contextualização da pesquisa,apresentando o tema, o problema a ser abordado, a(s) hipótese(s) ou pressupostos e a justificativa. O tema é uma delimitação do assunto da pesquisa, a qual pode ser relacionada à realidade do pesquisador tendo em vista sua intenção de conhecer melhor um assunto, investigá-lo ou realizar algo de maneira mais eficiente em relação ao mesmo. A justificativa reflete o “porquê” da realização da pesquisa, buscando identificar os motivos da preferência pelo tema escolhido e sua importância em comparação a outros temas. O conteúdo de uma justificativa deve ser constituído de dois aspectos: relevância (social,científica ou acadêmica) do tema e abrangência do assunto.
+O malte é um produto de extrema importância para diversos setores industriais, com ele sendo o principal insumo na 
+produção de cerveja, onde fornece açúcares fermentáveis, cor e aroma à bebida. No setor cervejeiro, o malte de cevada 
+é o mais utilizado; no entanto, há um crescente interesse em pesquisas que buscam desenvolver malte a partir de outros 
+grãos, como arroz, milho e trigo, visando atender demandas específicas, como a produção de cervejas livres de 
+glúten \cite{CECCARONI2019}. Além disso, o malte tem ganhado destaque como ingrediente funcional na indústria 
+alimentícia, sendo utilizado, por exemplo, na fabricação de pães, devido às suas propriedades nutricionais \cite{KOISTINEN2020}.
+
+A produção de malte, no entanto, enfrenta desafios significativos, especialmente em climas quentes, onde o controle 
+preciso de temperatura, umidade e tempo, durante as etapas de maceração, germinação e secagem, é crucial para garantir 
+a qualidade do produto \cite{KOVALOVA2024}. O controle desses parâmetros torna a malteação um processo complexo, 
+exigindo equipamentos especializados e sistemas automatizados para otimizar a produção. No contexto acadêmico e de 
+pesquisa, a falta de equipamentos acessíveis e confiáveis para malteação em laboratório limita o desenvolvimento de 
+estudos e inovações nesta área, evidenciando a importância de soluções de baixo custo e alta eficiência.
+
+Nesse contexto, um dos principais desafios enfrentados é a falta de equipamentos que permitam a malteação controlada em 
+laboratório, comprometendo a precisão e a reprodutibilidade dos experimentos. Durante uma iniciação científica (IC), 
+foi desenvolvido um protótipo inicial, não finalizado, restando completar a montagem física e desenvolver o sistema 
+de controle e automação. O presente trabalho dá continuidade à IC ao propor uma solução de software responsável por 
+garantir que o processo de malteação ocorra adequadamente.
+
+A proposta visa o desenvolvimento de um sistema baseado no microcontrolador ESP 32 integrado com um aplicativo Android. 
+Esse dispositivo foi escolhido por sua relação custo-benefício, capacidade de processamento e suporte a tecnologias de 
+comunicação como Bluetooth e Wi-Fi. Para seu firmware, optou-se pela linguagem MicroPython, que oferece uma curva de 
+aprendizado suave e é bastante utilizada em projetos de prototipagem rápida e IoT. Já o aplicativo Android foi 
+desenvolvido em Kotlin, garantindo uma interface intuitiva e responsiva. A comunicação entre o firmware e o aplicativo 
+é realizada via Bluetooth Low Energy (BLE), uma tecnologia de baixo consumo energético e amplamente disponível em 
+dispositivos móveis, permitindo a configuração remota e o monitoramento em tempo real dos parâmetros operacionais. 
+Além disso, a documentação dos softwares desenvolvidos pode servir como referência para outros estudos envolvendo 
+Internet das Coisas (IoT) dentro do IFES, especialmente no que se refere à integração entre ESP 32 e Android.
+
+Este trabalho surge a partir da demanda do Laboratório de Análises de Cerveja e Matérias-Primas (LACEMP), 
+que busca iniciar estudos experimentais sobre o processo de malteação. A ausência de um equipamento adequado e acessível 
+para pesquisas acadêmicas motivou o desenvolvimento de um sistema que permita monitorar e controlar as variáveis do 
+processo de forma precisa e reprodutível. 
+
+Por fim, a automação proposta busca simplificar a operação do equipamento e fornecer dados estruturados sobre o processo, 
+facilitando futuras análises e ajustes nos experimentos conduzidos no LACEMP. 
+Com isso, espera-se que esta solução de baixo custo promova avanços tanto na pesquisa acadêmica quanto no desenvolvimento 
+de tecnologias acessíveis para a indústria cervejeira e áreas afins.

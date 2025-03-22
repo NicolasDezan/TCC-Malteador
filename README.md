@@ -1,48 +1,110 @@
-# IFTEX - Modelo de TCC do Ifes
-Template de Trabalho de Conclusão de Curso de acordo com as [Normas para Apresentação de Trabalhos Acadêmicos e Científicos de 2017](https://www.ci.ifes.edu.br/images/stories/2017/biblioteca/caderno_normas_tcc_2017-277_rev_27-11.pdf) do Instituto Federal de Educação, Ciência e Tecnologia do Espírito Santo.
+# Estrutura do TCC
 
-## Overleaf Gallery
-[**IFTEX - Modelo de TCC do Ifes**](https://www.overleaf.com/latex/templates/iftex-modelo-de-tcc-do-ifes/cqxwcjyhkzkp)
+## Resumo (150–250 palavras)
+📌 *`O que incluir?`*
+- Contexto: importância da malteação e desafios de automação em climas quentes.
+- Objetivo: desenvolvimento de firmware e aplicativo para controle do malteador.
+- Metodologia: simulação de sensores/atuadores via ESP32, desenvolvimento do app Android.
+- Resultados esperados: software funcional, controle assíncrono, modularidade didática.
+- Limitações: sem integração física/testes experimentais.
+- Aplicabilidade futura: otimização experimental e uso didático.
 
+🔹 Palavras-chave: Automação, Malteação, Firmware, Aplicativo, Controle de Processos.
 
-## Dicas de uso
+## Introdução
 
-### Elementos visuais:
+### Contextualização
+- A importância do malte no setor industrial (cervejeiro, alimentício, etc.).
+- O desafio da malteação em climas quentes.
+- A necessidade de controle preciso de temperatura, umidade e tempo.
 
-* [Figuras](https://github.com/hsneto/iftex/blob/master/textuais/testes.tex#L10)
-* [Tabelas](https://github.com/hsneto/iftex/blob/master/textuais/testes.tex#L38)
-* [Quadros](https://github.com/hsneto/iftex/blob/master/textuais/testes.tex#L60)
+### Problema de Pesquisa
+- Falta de equipamentos acessíveis para malteação controlada em laboratório.
+- Protótipo inicial não funcional desenvolvido na IC (deficiências em sensores e automação).
+- Necessidade de um sistema de controle confiável e didático.
 
-> Ferramenta para criação de tabelas e quadros: [LaTeX Table Generator](https://www.tablesgenerator.com/). Em caso de necessidade, faça os ajustes necessários.
+### Justificativa
+- **Acadêmica:** Ferramenta de ensino para o LACEMP-IFES.
+- **Técnica:** Controle automatizado pode melhorar a qualidade do malte produzido.
+- **Econômica:** Solução de baixo custo baseada em ESP32 e Kotlin.
 
-> Em caso de tabelas e quadros ultrapassando a margem da página, utilize `tabularx` conforme o [exemplo](https://github.com/hsneto/iftex/blob/master/textuais/testes.tex#L60).
+## Objetivos
 
+### Objetivo Geral
+*Desenvolver um firmware (ESP32) e um aplicativo (Android) para simular e gerenciar o processo de malteação em laboratório.*
 
-### Referências cruzadas:
+### Objetivos Específicos
+- *Criar um firmware para ESP32, simulando sensores e atuadores.*
+- *Implementar algoritmos assíncronos para controle das etapas do processo.*
+- *Desenvolver um aplicativo Android para configuração e monitoramento.*
+- *Documentar o código e criar tutoriais didáticos para outros projetos.*
 
-Clique [aqui](https://github.com/hsneto/iftex/blob/master/textuais/testes.tex#L85) para exemplos de referências cruzadas.
+## Revisão Bibliográfica
+📌 *`Aqui você reforça a parte química do trabalho`*
 
+### O Processo de Malteação
+- Etapas: Maceração → Germinação → Secagem.
+- Reações químicas envolvidas:
+  - **Maceração:** Hidratação do grão e ativação de enzimas.
+  - **Germinação:** Conversão de amido em açúcares fermentáveis.
+  - **Secagem:** Desenvolvimento de compostos aromáticos (Maillard, pirazinas).
 
-### BibTex:
+### Importância do Controle de Variáveis no Processo
+- Como temperatura, umidade e CO₂ afetam a qualidade do malte.
+- Exemplos de variações indesejadas e seus impactos no produto final.
 
-Em função das [Normas para apresentação de referências NBR 6023](ftp://ftp.sm.ifes.edu.br/rec/Normas%20de%20est%E1gio/Norma%20para%20apresentacao%20de%20referencias%20academicas.pdf), siga as recomendações abaixo:
+### Automação na Indústria Química
+- Uso de sensores e atuadores no controle de processos industriais.
+- Benefícios da automação: padronização, eficiência e reprodutibilidade.
 
-* É aconselhável que todas as referências tenham a URL e data de acesso. Para tal utilize os campos `url`, `urlaccessdate`.
-    * O campo `urlaccessdate` deve ser informado com o seguinte padrão: `urlaccessdate = {01 jan. 20xx}`
-* Atente-se para o preenchimento dos nomes dos autores.
-    * Acompanham o último sobrenome palavras indicativas de grau de parentesco como “Filho”, “Neto”, “Júnior”; Neste caso, o campo `author` deve ser preechido da seguinte forma `author = {Fulano da Silva{ }Júnior}`.
-    * Altere o campo `abnt-full-initials` do pacote `abntex2cite` para `no` no arquivo [iftex.cls](https://github.com/hsneto/iftex/blob/master/iftex.cls#L52) para exibir os nomes contraídos ao invés do nome completo de todos os autores. 
-* Em casos de referências com subtítulos, utilize os campos `title` e `subtitle` para a correta formatação.
-* Em casos de monografias, teses de mestrado e phd utilize as seguintes referências `@monography`, `@@masterthesis`, `@phdthesis` respectivamente.
-    * Em casos de erro, tente inserir os campos `pages` e `pagename`.
-* Normas não utilizam o campo `author`, mas sim `organization` e `org-short`.
+### ecnologias Utilizadas
+- ESP32 e MicroPython: Vantagens para ensino e automação.
+- Bluetooth vs. Wi-Fi: Justificativa para escolha do Bluetooth.
+- Lógica PID: Conceito e aplicações no controle de processos.
 
+## Metodologia
 
-## Autores
+### Desenvolvimento do Firmware
+- **Linguagem:** MicroPython no ESP32.
+- Implementação de sensores simulados (temperatura, umidade, CO₂).
+- Algoritmos assíncronos para controle das etapas da malteação.
+- Implementação do controle PID.
 
-* **Humberto da Silva Neto**
-* Daniel Campos Pompermayer (contribuição)
+### Desenvolvimento do Aplicativo Android
+- **Linguagem:** Kotlin + SQLite.
+- **Interface gráfica e funcionalidades:**
+  - Envio de parâmetros via Bluetooth.
+  - Monitoramento dos dados simulados.
 
-## Licença
+### Estrutura de Documentação e Código
+- **GitHub:** Repositório separado para firmware e app.
+- **Tutoriais:** Criação de vídeos explicando a integração Bluetooth.
 
-Este projeto está licenciado sob a licença LPPL - consulte o arquivo [LICENSE](LICENSE) para detalhes.
+### Limitações do Estudo
+- Não inclui montagem física ou validação experimental.
+- Apenas simulação do processo, sem testes reais com malteação.
+
+## Resultados e Discussão
+📌 *`O que incluir se não houver testes físicos?`*
+
+### Resultados Esperados
+- Firmware e aplicativo funcionais para simulação do malteador.
+- Controle das etapas via algoritmo assíncrono e lógica PID.
+- Código modular para facilitar adaptação em outros projetos.
+
+### Comparação com Dados da Literatura
+- Comparação das variáveis simuladas com dados reais da malteação.
+- Análise teórica: impacto do controle automatizado na qualidade do malte.
+
+### Possibilidades de Melhorias
+- Implementação em hardware real.
+- Validação experimental com diferentes tipos de grãos.
+- Integração com sensores reais no futuro.
+
+## Conclusão
+📌 *`Resumo final do trabalho`*
+
+- **O que foi desenvolvido?** Firmware e aplicativo.
+- **Qual a importância?** Ferramenta didática e controle de processos.
+- **Quais são as limitações?** Falta de testes físicos e validação experimental.
+- **O que pode ser feito no futuro?** Montagem física e otimização do processo.
