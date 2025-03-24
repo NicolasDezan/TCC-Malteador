@@ -40,7 +40,6 @@
 - *Documentar o código e criar tutoriais didáticos para outros projetos.*
 
 ## Revisão Bibliográfica
-📌 *`Aqui você reforça a parte química do trabalho`*
 
 ### O Processo de Malteação
 - Etapas: Maceração → Germinação → Secagem.
@@ -51,7 +50,6 @@
 
 ### Importância do Controle de Variáveis no Processo
 - Como temperatura, umidade e CO₂ afetam a qualidade do malte.
-- Exemplos de variações indesejadas e seus impactos no produto final.
 
 ### Automação na Indústria Química
 - Uso de sensores e atuadores no controle de processos industriais.
