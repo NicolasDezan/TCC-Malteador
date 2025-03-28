@@ -54,11 +54,11 @@
 ### Automação na Indústria Química
 - Uso de sensores e atuadores no controle de processos industriais.
 - Benefícios da automação: padronização, eficiência e reprodutibilidade.
+- Controle ON/OFF
 
 ### Tecnologias Utilizadas
 - ESP32 e MicroPython: Vantagens para ensino e automação.
 - Bluetooth vs. Wi-Fi: Justificativa para escolha do Bluetooth.
-- Lógica PID: Conceito e aplicações no controle de processos.
 
 ## Metodologia
 
@@ -98,6 +98,7 @@
 - Implementação em hardware real.
 - Validação experimental com diferentes tipos de grãos.
 - Integração com sensores reais no futuro.
+- Implementação de Controle PID
 
 ## Conclusão
 📌 *`Resumo final do trabalho`*
@@ -105,4 +106,4 @@
 - **O que foi desenvolvido?** Firmware e aplicativo.
 - **Qual a importância?** Ferramenta didática e controle de processos.
 - **Quais são as limitações?** Falta de testes físicos e validação experimental.
-- **O que pode ser feito no futuro?** Montagem física e otimização do processo.
+- **O que pode ser feito no futuro?** Montagem física, validação e otimização do processo.

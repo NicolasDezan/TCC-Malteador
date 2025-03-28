@@ -19,6 +19,7 @@ Durante a germinação, a ativação de enzimas hidrolíticas desempenha um pape
 Quando a germinação atinge o tempo otimizado para promover as melhores transformações, inicia-se a etapa de secagem. Nessa fase, de acordo com \apudonline{GRIFFITHS1992}{WOFFENDEN2002}, os grãos são desidratados por até 30 horas, o que resulta em um malte base de fácil manuseio e adequado para armazenamento. Além da redução da umidade para aumento da estabilidade do produto final, a secagem promove o desenvolvimento de aromas desejados e de coloração no malte \cite{BAMFORTH2003}. Apesar disso, se a intenção é produzir um malte base, a temperatura não pode ser excessiva, com o fim de preservar as enzimas, como as amilases, no produto final \cite{LEWIS2012}.Outra questão benéfica é que a secagem elimina boa parte dos microorganismos que cresceram de forma indesejada durante os processos anteriores \cite{DOUGLAS1988, PETTERS1988}. 
 
 
+
 \section{Variáveis na malteação}
 
 \subsection{Temperatura}
@@ -43,3 +44,20 @@ A duração de cada etapa da malteação é um fator crítico para a qualidade d
 Na etapa de maceração, o tempo necessário para a hidratação dos grãos é um fator determinante para a ativação enzimática e o desenvolvimento adequado do malte. \citeonline{MONTANUCI2017} demonstraram que períodos mais longos de maceração favorecem a absorção de água, impactando diretamente a degradação de $\beta$-glucanos e o desenvolvimento das enzimas $\alpha$- e $\beta$-amilase. No entanto, o tempo ideal depende da temperatura empregada: enquanto macerações a 10 $^{\circ}$C por 24 horas resultam em maior teor de açúcares no malte, temperaturas mais elevadas (20 $^{\circ}$C por 12 horas) aceleram a hidratação, porém podem comprometer a viabilidade dos grãos e aumentar a degradação de componentes essenciais. Além disso, tempos excessivos de maceração podem favorecer o crescimento microbiológico indesejado, exigindo um controle rigoroso para evitar contaminações e perdas na qualidade do malte \cite{LUARASI2016}. Dessa forma, a definição do tempo de maceração deve equilibrar a eficiência da hidratação com a preservação da integridade dos grãos, garantindo um substrato adequado para as etapas subsequentes da malteação.
 
 O tempo de secagem deve ser ajustado em conjunto com a temperatura para garantir uma remoção eficiente da umidade, reduzindo-a para aproximadamente 4\%, sem comprometer a qualidade enzimática e sensorial do malte \cite{LEWIS2012}.
+
+
+
+\section{Automação e controle de processos}
+
+A automação desempenha um papel essencial na indústria no geral, proporcionando maior qualidade no produto final, otimização da produção e aumento da segurança operacional \cite{SEBORG2016}. Para garantir um controle eficaz dos processos industriais, são utilizados sistemas instrumentados, compostos por três elementos fundamentais: sensores, processadores de sinais e interfaces de visualização \cite{BOLTON2021}. Os sensores são responsáveis pela coleta de informações sobre variáveis do processo, como temperatura, pressão e vazão, permitindo o monitoramento contínuo das condições operacionais. Os processadores de sinais, por sua vez, realizam o tratamento e a interpretação dos dados captados, aplicando algoritmos de controle para ajustar automaticamente os parâmetros do sistema conforme necessário. Já as interfaces de visualização possibilitam que operadores e engenheiros acompanhem o comportamento do processo em tempo real, viabilizando a tomada de decisões informadas e a rápida identificação de falhas \cite{BOLTON2021}. Além disso, sistemas automatizados contribuem significativamente para a reprodutibilidade dos processos industriais, reduzindo variações indesejadas e garantindo conformidade com padrões regulatórios \cite{SEBORG2016}.
+
+\subsection{Controlador ON-OFF}
+O controlador ON-OFF é um dos métodos mais simples de controle de processos, operando com apenas dois estados: ligado (ON) e desligado (OFF). Esse tipo de controle é amplamente utilizado quando precisão extrema não é necessária e o sistema pode tolerar pequenas oscilações na variável controlada \cite{BOLTON2021}. Seu funcionamento é baseado em um ponto de ajuste (setpoint): quando a variável de processo ultrapassa esse valor, o atuador é ativado ou desativado, sem intermediários. Embora seja uma solução de fácil implementação e baixo custo, pode gerar oscilações constantes em torno do setpoint, tornando-se inadequado para processos que exigem estabilidade mais refinada \cite{SEBORG2016}.
+
+\subsection{Interfaces Gráficas (GUI)}
+A Interface Gráfica do Usuário (GUI) é um elemento essencial na automação, pois permite a interação intuitiva entre operadores e sistemas de controle. Segundo \citeonline{BOLTON2021}, esse tipo de interface apresenta informações de processo de forma visual e interativa, utilizando janelas, ícones, menus e dispositivos apontadores (WIMP - Windows, Icons, Menus, Pointing Device). Em ambientes industriais, as telas de supervisão geralmente empregam displays miméticos, que representam esquematicamente as principais partes de uma planta, exibindo valores atualizados de variáveis controladas, gráficos de tendências e alarmes em tempo real. Além disso, as interfaces gráficas possibilitam que os operadores definam valores de setpoint e ajustem parâmetros do processo diretamente pela tela, eliminando a necessidade de comandos textuais complexos.
+
+
+
+% Parágrafos potencialmente utilizáveis:
+    % Os microcontroladores são amplamente utilizados na automação industrial, pois integram em um único circuito diversos componentes essenciais, como microprocessador, memória, interfaces de entrada e saída, e conversores de sinal analógico-digital (ADC) e digital-analógico (DAC) \cite{BOLTON2021}.
