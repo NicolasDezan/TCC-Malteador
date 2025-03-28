@@ -55,7 +55,7 @@
 - Uso de sensores e atuadores no controle de processos industriais.
 - Benefícios da automação: padronização, eficiência e reprodutibilidade.
 
-### ecnologias Utilizadas
+### Tecnologias Utilizadas
 - ESP32 e MicroPython: Vantagens para ensino e automação.
 - Bluetooth vs. Wi-Fi: Justificativa para escolha do Bluetooth.
 - Lógica PID: Conceito e aplicações no controle de processos.
