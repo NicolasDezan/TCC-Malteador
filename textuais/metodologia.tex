@@ -1,0 +1,62 @@
+\chapter{Metodologia}
+
+\section{Desenvolvimento do Firmware}
+\subsection{Ambiente de Desenvolvimento}
+O firmware foi desenvolvido para a placa ESP32C3 Module utilizando o interpretador MicroPython na versão 1.24.1. A instalação do firmware foi realizada através do Thonny IDE, ferramenta que também permitiu a transferência dos scripts Python para a memória do dispositivo.
+
+\subsection{Estruturação do Projeto e Modularização}
+A arquitetura do firmware foi organizada em três diretórios principais (\texttt{lib}, \texttt{data}, \texttt{tasks}) complementados pelo arquivo \texttt{main.py}, que coordena a inicialização do sistema. No diretório \texttt{lib}, foram alocadas bibliotecas específicas, incluindo \texttt{aioble} para gestão simplificada do Bluetooth Low Energy (BLE), estratégia que reduziu a complexidade de implementação das operações de comunicação. O subdiretório \texttt{utils} concentrou módulos auxiliares como \texttt{bluetooth\_config.py} para definição de parâmetros de conexão e \texttt{data\_converter.py} para serialização de dados, garantindo comunicação correta com o aplicativo Android.
+
+A persistência de configurações operacionais foi implementada no diretório \texttt{data} através do arquivo \texttt{config.json}, complementado por um conjunto de valores padrão em \texttt{default\_data.py} como mecanismo de segurança para cenários de corrupção de dados. Essa abordagem assegurou estabilidade na inicialização do sistema mesmo em condições adversas, crítica para operações autônomas.
+
+\subsection{Gestão de Tarefas Assíncronas}
+A lógica central do firmware foi desenvolvida no arquivo \texttt{main.py}, onde foram instanciadas quatro corrotinas principais utilizando o módulo \texttt{asyncio} do MicroPython. A função \texttt{main()} coordena:
+
+\begin{itemize}
+
+\item \texttt{peripheral\_task()}, responsável pelo ciclo de vida das conexões BLE;
+\item \texttt{send\_heartbeat\_task()}, que emite pacotes de sincronização a cada 2 segundos contendo métricas de integridade do sistema utilizando o módulo utilitário \texttt{memory\_usage.py};
+\item \texttt{read\_task()}, dedicada ao processamento de dados recebidos via Bluetooth com despacho para handlers especializados;
+\item \texttt{malting\_task()}, núcleo do controle do processo de malteação.
+
+\end{itemize}
+
+A separação funcional foi estendida no diretório \texttt{tasks}, onde cada módulo encapsula comportamentos específicos: \texttt{parameters\_task.py} gerencia atualizações dinâmicas de parâmetros operacionais, enquanto \texttt{task\_handler.py} implementa um padrão de mediador para roteamento de comandos baseado no primeiro byte dos pacotes recebidos.
+
+\subsection{Algoritmos de Controle do Processo de Malteação}
+A sequência de maceração, germinação e secagem foi modelada no subdiretório \texttt{malting\_stages} em módulos especializados (\texttt{steeping.py}, \texttt{germination.py}, \texttt{kilning.py}). Cada etapa opera como uma corrotina independente, monitorando variáveis críticas com base nas condicionais dos parâmetros recebidos via Bluetooth. A estrutura assíncrona permitiu a execução não bloqueante desses processos, essencial para a continuidade da comunicação Bluetooth mesmo durante o processo. As lógicas de marcação de tempo foram desenvolvidas com o uso do módulo utilitário \texttt{uptime.py}, que se baseia no tempo total de execução do dispositivo.
+
+
+% Esta estrutura modular e documentada, combinada com o versionamento no GitHub, não apenas atende aos requisitos imediatos de controle do malteador, mas serve como modelo reutilizável para outros sistemas de automação laboratorial na instituição, objetivo explícito do trabalho conforme estabelecido no escopo pedagógico do LACEMP-IFES.
+
+
+\section{Desenvolvimento do Aplicativo}
+\subsection{Ambiente e Ferramentas de Desenvolvimento}
+
+O ambiente de desenvolvimento foi estabelecido utilizando a IDE Android Studio (Koala Feature Drop - 2024.1.2) com linguagem Kotlin na versão 1.9.10. Os testes foram conduzidos em um dispositivo físico com Android 14, garantindo compatibilidade com as APIs mais recentes do sistema operacional. Escolheu-se o ecossistema Android Jetpack como base tecnológica devido a sua estabilidade e suporte oficial da plataforma Google para desenvolvimento de aplicativos.
+
+\subsection{Arquitetura e Padrões de Projeto}
+
+Adotou-se uma arquitetura em camadas conforme as diretrizes de boas práticas do Android Moderno, estruturada em três módulos principais: \textit{data}, \textit{domain} e \textit{presentation}. O módulo \textit{data} concentra a gestão de fluxos de informação, incluindo comunicação Bluetooth e operações de banco de dados local através das bibliotecas Room e DataStore. Na camada \textit{domain}, implementou-se a lógica de negócios e tratamento de dados, incluindo a normalização de parâmetros de processo e validação de entradas. A camada de \textit{presentation} foi desenvolvida com Jetpack Compose, seguindo os princípios de Design Material 3 para interface homogênea e acessível.
+
+\subsection{Modularização e Injeção de Dependências}
+
+Visando a manutenibilidade, o projeto empregou o padrão de injeção de dependências através da biblioteca Dagger Hilt. Esta abordagem permitiu a desacoplamento entre componentes, promovendo melhor a manutenibilidade do projeto como um todo. 
+
+\subsection{Integração Bluetooth e Gestão de Dispositivos}
+
+A comunicação com o hardware ESP32 foi implementada através da API Android Bluetooth Low Energy (BLE), utilizando o padrão GATT para transferência de dados. Desenvolveu-se um serviço em segundo plano para gerenciamento assíncrono da conexão, capaz de manter a estabilidade da ligação mesmo durante mudanças de estado do aplicativo. Para persistência local, implementou-se um repositório combinando SQLite (via Room) para armazenamento de histórico de processos e receitas e Preferences DataStore para configurações do usuário, como o tema escuro e claro.
+
+\subsection{Compilação}
+
+Em algum momento eu realmente preciso compilar esse aplicativo pra .apk
+
+
+
+\section{Documentação}
+A gestão do código-fonte foi implementada mediante a utilização do sistema de controle de versão Git, com hospedagem pública em dois repositórios GitHub dedicados: um para o firmware \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl.git} e outro para o aplicativo Android \url{https://github.com/NicolasDezan/MALT-ESP.git}. A separação em repositórios distintos buscou garantir a modularidade entre os componentes de software, além de facilitar a manutenção independente de cada projeto.
+
+\subsection{Tutoriais}
+Talvez eu grave tutoriais mostrando os códigos e o sistema funcionando etc etc etc
+Se sobrar tempo e se os videos ficarem legais eu vou incluir uma fala do tipo:
+A documentação técnica incluiu tutoriais em vídeo externos (links no arquivo \texttt{README.md}) detalhando processos críticos como configuração inicial do ESP32-C3 e emparelhamento Bluetooth.
