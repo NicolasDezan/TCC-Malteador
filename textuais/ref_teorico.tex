@@ -39,7 +39,7 @@ De acordo com \citeonline{SKENDI2018}, a temperatura de secagem influencia diret
 A aeração dos grãos é um aspecto essencial da malteação, uma vez que o processo envolve um organismo vivo que depende da respiração para seu desenvolvimento \cite{MALLETT2022}. De acordo com \citeonline{WILHELMSOM2006}, no início da maceração ocorre uma deficiência de oxigênio devido à submersão dos grãos, mas esse fator não compromete a qualidade do malte. No entanto, à medida que a germinação avança, a disponibilidade de O$_2$ torna-se mais crítica, pois a respiração dos grãos gera acúmulo de dióxido de carbono, o que pode inibir a germinação. Esse efeito pode ser intensificado pelo emaranhamento das radículas, que dificulta a circulação de ar e reduz ainda mais a disponibilidade de oxigênio. Para mitigar esse problema, sistemas revolvedores são frequentemente empregados para movimentar os grãos e garantir uma aeração adequada ao longo do processo \cite{CENCI2021}. 
 
 \subsection{Tempo}
-A duração de cada etapa da malteação é um fator crítico para a qualidade do malte, influenciada pela variedade do grão e pelas condições do processo (umidade, temperatura e aeração). A otimização desse parâmetro é essencial para adaptar novas variedades às demandas industriais. Como demonstrado por \citeonline{FARZANEH2017}, o tempo de germinação (3 a 7 dias) afeta diretamente as propriedades do malte: períodos mais longos (7 dias) elevam a atividade de $\beta$-glucanase e $\alpha$-amilase, reduzindo o teor de amido e $\beta$-glucano devido ao consumo enzimático, além de aumentar as perdas por crescimento. Assim, a definição do tempo ideal deve equilibrar modificação enzimática e eficiência do processo, considerando o perfil desejado no malte. Por exemplo, germinação prolongada é indicada para cervejas de alta fermentescibilidade, enquanto períodos mais curtos (3-5 dias) preservam polissacarídeos, sendo ideais para estilos encorpados.
+A duração de cada etapa da malteação é um fator crítico para a qualidade do malte, influenciada pela variedade do grão e pelas condições do processo (umidade, temperatura e aeração). A otimização desse parâmetro é essencial para adaptar novas variedades às demandas industriais. Como demonstrado por \citeonline{FARZANEH2017}, o tempo de germinação (3 a 7 dias) afeta diretamente as propriedades do malte: períodos mais longos (7 dias) elevam a atividade de $\beta$-glucanase e $\alpha$-amilase, reduzindo o teor de amido e $\beta$-glucano devido ao consumo enzimático, além de aumentar as perdas por crescimento. Assim, a definição do tempo ideal deve equilibrar modificação enzimática e eficiência do processo, considerando o perfil desejado no malte. Por exemplo, germinação prolongada é indicada para cervejas de alta fermentabilidade, enquanto períodos mais curtos (3-5 dias) preservam polissacarídeos, sendo ideais para estilos encorpados.
 
 Na etapa de maceração, o tempo necessário para a hidratação dos grãos é um fator determinante para a ativação enzimática e o desenvolvimento adequado do malte. \citeonline{MONTANUCI2017} demonstraram que períodos mais longos de maceração favorecem a absorção de água, impactando diretamente a degradação de $\beta$-glucanos e o desenvolvimento das enzimas $\alpha$- e $\beta$-amilase. No entanto, o tempo ideal depende da temperatura empregada: enquanto macerações a 10 $^{\circ}$C por 24 horas resultam em maior teor de açúcares no malte, temperaturas mais elevadas (20 $^{\circ}$C por 12 horas) aceleram a hidratação, porém podem comprometer a viabilidade dos grãos e aumentar a degradação de componentes essenciais. Além disso, tempos excessivos de maceração podem favorecer o crescimento microbiológico indesejado, exigindo um controle rigoroso para evitar contaminações e perdas na qualidade do malte \cite{LUARASI2016}. Dessa forma, a definição do tempo de maceração deve equilibrar a eficiência da hidratação com a preservação da integridade dos grãos, garantindo um substrato adequado para as etapas subsequentes da malteação.
 
@@ -59,5 +59,39 @@ A Interface Gráfica do Usuário (GUI) é um elemento essencial na automação, 
 
 
 
-% Parágrafos potencialmente utilizáveis:
-    % Os microcontroladores são amplamente utilizados na automação industrial, pois integram em um único circuito diversos componentes essenciais, como microprocessador, memória, interfaces de entrada e saída, e conversores de sinal analógico-digital (ADC) e digital-analógico (DAC) \cite{BOLTON2021}.
+\section{ESP32}
+
+O ESP32 é uma evolução do ESP8266, apresentando melhorias significativas, como suporte a Bluetooth dual-mode (Classic e Low Energy) e Wi-Fi integrado, além de um processamento mais robusto e maior eficiência energética \cite{TOLLERVEY2017}.
+
+De acordo com \citeonline{KOLBAN2017}, os circuitos integrados baseados no ESP32 são amplamente utilizados devido ao seu baixo custo e à capacidade de executar aplicações autônomas, tornando-se uma escolha popular para projetos de automação e controle de processos. Além disso, sua versatilidade permite a integração com diversos sensores e dispositivos periféricos, tornando-o adequado para uma ampla gama de aplicações em automação e sistemas embarcados.
+
+Graças à sua conectividade com a internet, as placas ESP32 estão fortemente associadas ao conceito de Internet das Coisas (IoT). O IoT tem papel fundamental na otimização de processos industriais, permitindo a coleta de dados em larga escala (big data) e a detecção de falhas, o que contribui para a redução de custos operacionais \cite{ferencz2020rapid}. Essa tecnologia é composta por uma variedade de dispositivos, como sensores, atuadores e controladores, que podem se comunicar por meio de diferentes protocolos, incluindo Bluetooth, Ethernet e Wi-Fi \cite{shinde2017industrial}.
+
+Um exemplo prático do uso do IoT em aplicações industriais foi apresentado por \citeonline{shinde2017industrial}, que desenvolveram um sistema de monitoramento de energia utilizando o ESP8266 Wi-Fi. Nesse estudo, os dados coletados eram processados e exibidos em uma interface web, demonstrando a viabilidade da automação industrial baseada em IoT.
+
+
+\subsection{MicroPython}
+
+O MicroPython é um interpretador da linguagem Python 3 desenvolvido especificamente para microcontroladores \cite{PLAUSKA2022}. A linguagem Python destaca-se por sua sintaxe simplificada e ampla adoção na comunidade tecnológica, sendo especialmente útil para programadores iniciantes \cite{TOLLERVEY2017}.
+
+Estudos conduzidos por \citeonline{PLAUSKA2022} avaliaram o desempenho das principais linguagens utilizadas na programação do ESP32, incluindo o MicroPython. Os resultados indicaram que, embora sua eficiência em termos de desempenho seja inferior à de linguagens compiladas, como C e C++, o MicroPython continua sendo uma alternativa viável para aplicações em sistemas de alto nível. Sua principal vantagem reside na facilidade de prototipação e desenvolvimento rápido, tornando-o ideal para projetos onde o controle fino do hardware não é um requisito crítico \cite{tanganelli2019rapid}.
+
+
+
+\section{Android}
+
+O Android é um dos principais sistemas operacionais para dispositivos móveis, sendo um projeto de código aberto baseado no kernel Linux e liderado pelo Google \cite{ABLESON2011}. Inicialmente, os aplicativos desenvolvidos para essa plataforma eram escritos predominantemente em Java \cite{ABLESON2011}. No entanto, em 2017, o Google anunciou suporte oficial ao Kotlin como linguagem de desenvolvimento para Android \cite{SILLS2023}.
+
+A integração entre sistemas IoT e dispositivos móveis baseados em Android é um avanço importante para aplicações de monitoramento remoto. Um exemplo desse tipo de integração foi descrito por \citeonline{mohanasundaram2024water}, que desenvolveram um sistema para monitoramento da qualidade da água em tempo real. O sistema utilizava sensores de pH, turbidez, temperatura e nível de água para coletar dados, que eram então disponibilizados para visualização em uma aplicação Android e em uma interface web, permitindo o acesso remoto, também, a partir de outros sistemas operacionais. Segundo os autores, o uso da automação e da tecnologia embarcada promovida pelo IoT simplificou significativamente o processo de coleta de dados, aumentando a eficiência e a precisão na avaliação da qualidade da água.
+
+\subsection{Kotlin}
+
+O Kotlin se destaca como uma linguagem moderna, concisa, segura e pragmática, oferecendo total interoperabilidade com código Java, o que facilita a migração e a integração de projetos legados \cite{JEMEROV2017}. Atualmente, é amplamente adotado como a principal linguagem para o desenvolvimento de aplicativos móveis na plataforma Android, proporcionando maior produtividade e reduzindo a incidência de erros comuns durante a programação.
+
+\subsection{Bluetooth}
+
+A plataforma Android oferece suporte a diferentes protocolos de comunicação via Bluetooth, incluindo o Bluetooth Low Energy (BLE), possibilitando a conexão eficiente com dispositivos como o ESP32 \cite{android_bluetooth_overview}.
+
+O BLE foi desenvolvido como uma extensão do Bluetooth clássico, com o objetivo de reduzir significativamente o consumo de energia sem comprometer a conectividade \cite{heydon2012bluetooth}. Essa tecnologia é utilizada em aplicações que exigem comunicação contínua com baixo consumo energético. No contexto da automação e do monitoramento remoto, a integração entre Android e ESP32 via BLE permite a troca eficiente de dados em tempo real, viabilizando aplicações que demandam conectividade sem a necessidade de conexões Wi-Fi ou a cabo.
+
+% Talvez falar sobre Git e GitHub dependendo dos resultados...
