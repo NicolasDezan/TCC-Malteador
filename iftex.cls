@@ -62,9 +62,10 @@
 \usepackage{xparse}             % Mais de um argumento opcional nos macros
 
 
-%% Flush captions to left
-\hangcaption
-\captionstyle[\raggedright]{}
+% Comentei o trecho abaixo para centralizar o titulo das figuras (antes eram alinhados a esquerda)
+% Flush captions to left
+% \hangcaption
+% \captionstyle[\raggedright]{}
 
 % ------------------------------------------------------------------------------- %
 % CONFIGURAÇÕES DO PACOTE BACKREF                                                 %
