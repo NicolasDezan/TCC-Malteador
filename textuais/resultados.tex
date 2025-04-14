@@ -172,7 +172,7 @@ A estrutura do algoritmo de malteação foi desenvolvida com base em um modelo a
 
 \subsubsection{Maceração}
 
-A primeira etapa executada após o acionamento do sistema é a maceração. Ao entrar nesse estágio, o sistema atualiza o estado global para refletir a fase ativa (\textit{steeping}) e inicia duas tarefas assíncronas em paralelo: uma para controle de temperatura e outra para execução dos ciclos de tempo (\autoref{fig:steepingstage}). Essa separação permite que o sistema monitore e regule a temperatura de forma contínua, sem interromper a sequência temporal dos ciclos de hidratação.
+A primeira etapa executada após o acionamento do sistema é a maceração. Ao entrar nesse estágio, o sistema atualiza o estado global para refletir a fase ativa (\textit{steeping}) e inicia duas tarefas assíncronas em paralelo: uma para controle de temperatura (resfriamento) e outra para execução dos ciclos de tempo (\autoref{fig:steepingstage}). Essa separação permite que o sistema monitore e regule a temperatura de forma contínua, sem interromper a sequência temporal dos ciclos de hidratação.
 
 \begin{figure}[ht]
     \centering
@@ -196,7 +196,7 @@ Durante o controle de tempo, são executadas, de forma sequencial, as quatro sub
 
 O controle de válvulas, tanto para enchimento quanto para drenagem, segue um modelo baseado no tempo de abertura, adicionando o volume necessário para a operação. Apesar de simplificado, esse método pode ser ajustado posteriormente com base em calibrações que relacionem diretamente o tempo de válvula aberta ao volume de água processado. Esse aspecto é fundamental para permitir futuras melhorias sem a necessidade de reescrita da estrutura de controle.
 
-A lógica de controle de temperatura já está inserida como uma tarefa paralela com checagens periódicas e resposta ao sinal de aborto, embora o controle de temperatura (resfriamento) ainda não seja possível de controlar no ESP32 devido às características do protótipo desenolvido na IC. Essa estrutura modular (\autoref{fig:temperaturecontrol}) permite que, posteriormente, os sensores e atuadores sejam integrados com precisão ao algoritmo principal, mantendo a arquitetura atual.
+A lógica de controle de temperatura já está inserida como uma tarefa paralela com checagens periódicas e resposta ao sinal de aborto, embora o controle de temperatura (resfriamento) ainda não seja possível de controlar no ESP32 devido às características do protótipo desenvolvido na IC. Essa estrutura modular (\autoref{fig:temperaturecontrol}) permite que, posteriormente, os sensores e atuadores sejam integrados com precisão ao algoritmo principal, mantendo a arquitetura atual.
 
 \begin{figure}[ht]
     \centering
@@ -245,7 +245,7 @@ Encerrada a germinação, inicia-se a última etapa do processo: a secagem (\tex
     \centering
     \caption{Função assíncrona da secagem.}
     \label{fig:kilning}
-    \includegraphics[width=1.0\textwidth]{5_kilning.png}
+    \includegraphics[width=0.8\textwidth]{5_kilning.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
@@ -264,7 +264,7 @@ Nesta implementação, foram utilizados dois sensores conectados via protocolo I
     \centering
     \caption{Módulo de leitura dos sensores.}
     \label{fig:sensorreader}
-    \includegraphics[width=1.0\textwidth]{5_sensorreader.png}
+    \includegraphics[width=0.8\textwidth]{5_sensorreader.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
@@ -275,35 +275,185 @@ A leitura dos sensores ocorre de maneira contínua e assíncrona na tarefa \text
     \centering
     \caption{Trecho da função assíncrona de leitura dos sensores.}
     \label{fig:sensorstask}
-    \includegraphics[width=1.0\textwidth]{5_sensorstask.png}
+    \includegraphics[width=0.9\textwidth]{5_sensorstask.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
 
 O tratamento de falhas também foi considerado: caso a leitura de qualquer sensor falhe, o sistema atribui valor zero como padrão, garantindo que o fluxo da comunicação continue sem interrupções.
 
-Em paralelo à leitura de sensores, o sistema também gerencia cinco atuadores principais: duas válvulas (entrada e saída de água), um motor de rotação, uma resistência térmica e uma bomba de ar. A lógica de controle desses dispositivos é encapsulada na classe \texttt{Actuator} (\autoref{fig:actuatorclass}), desenvolvida para simplificar a manipulação dos pinos GPIO e abstrair as diferenças de lógica de acionamento (ativo-alto ou ativo-baixo).
-
 \begin{figure}[ht]
     \centering
     \caption{Definição da classe \texttt{Actuator}.}
     \label{fig:actuatorclass}
-    \includegraphics[width=1.0\textwidth]{5_actuatorclass.png}
+    \includegraphics[width=0.8\textwidth]{5_actuatorclass.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
-
-Cada atuador é instanciado em \texttt{actuators.py} com seu respectivo nome e número de pino, e armazenado em um dicionário global para facilitar o acesso dinâmico por outras partes do sistema (\autoref{fig:actuatorsdata}). A classe disponibiliza métodos como \texttt{on()}, \texttt{off()} e \texttt{toggle()}, além de uma função de verificação de estado atual. Dessa forma, o acionamento de cada dispositivo torna-se simples, confiável e rastreável (via terminal).
 
 \begin{figure}[ht]
     \centering
     \caption{Módulo de gerenciamento dos atuadores.}
     \label{fig:actuatorsdata}
-    \includegraphics[width=1.0\textwidth]{5_actuatorsdata.png}
+    \includegraphics[width=0.8\textwidth]{5_actuatorsdata.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
 
+Em paralelo à leitura de sensores, o sistema também gerencia cinco atuadores principais: duas válvulas (entrada e saída de água), um motor de rotação, uma resistência térmica e uma bomba de ar. A lógica de controle desses dispositivos é encapsulada na classe \texttt{Actuator} (\autoref{fig:actuatorclass}), desenvolvida para simplificar a manipulação dos pinos GPIO e abstrair as diferenças de lógica de acionamento (ativo-alto ou ativo-baixo).
+
+Cada atuador é instanciado em \texttt{actuators.py} com seu respectivo nome e número de pino, e armazenado em um dicionário global para facilitar o acesso dinâmico por outras partes do sistema (\autoref{fig:actuatorsdata}). A classe disponibiliza métodos como \texttt{on()}, \texttt{off()} e \texttt{toggle()}, além de uma função de verificação de estado atual. Dessa forma, o acionamento de cada dispositivo torna-se simples, confiável e rastreável (via terminal).
+
 Além do controle direto, foi implementada uma função de envio do estado atual dos atuadores via Bluetooth, permitindo que o aplicativo visualize, em tempo real, quais dispositivos estão ativos no momento (linha 19 na \autoref{fig:actuatorsdata}).
 
-\section{Aplicativo Android}
+\section{Aplicativo Android}\label{sec:aplicativo-android}
+
+\subsection{Tela Inicial: Conexão}\label{subsec:conexao}
+Ao inicializar o aplicativo, o usuário é direcionado à interface de conexão. Nesta tela, é exibido centralmente o status "Não conectado", acompanhado de um indicador de estado pulsante no canto superior direito, que alterna entre azul e cinza a cada segundo, quando conectado. A conexão com o dispositivo ESP32, previamente pareado via Bluetooth, é estabelecida mediante acionamento do botão "Conectar", conforme ilustrado na \autoref{fig:int-inicial}.
+
+\begin{figure}[ht]
+    \caption{Interface inicial do aplicativo.}
+    \label{fig:int-inicial}
+    \centering
+    \subfloat[Desconectado\label{fig:first-off}]{\includegraphics[width=0.3\textwidth]{first-off.png}}
+    \hfill
+    \subfloat[Conectado\label{fig:first-on}]{\includegraphics[width=0.3\textwidth]{first-on.png}}
+    \hfill
+    \subfloat[Tema escuro\label{fig:first-dark-theme}]{\includegraphics[width=0.3\textwidth]{first-dark-theme.png}}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+
+Ainda, na estrutura geral do \textit{Scaffold} (layout do aplicativo), destaca-se o \textit{FloatingActionButton} (FAB) no canto inferior direito. Este componente, ao ser acionado, expande um menu com funcionalidades essenciais (\autoref{fig:FAB}), incluindo:
+
+\begin{itemize}
+    \item \textit{Puxar Parâmetros}, para sincronização dos parâmetros com o ESP32;
+    \item \textit{Carregar Receita}, para autopreencher os parâmetros no aplicativo;
+    \item \textit{Iniciar}, para enviar os parâmetros e iniciar o processo de malteação.
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \caption{Menu expandido do FloatingActionButton (FAB) com opções de controle.}
+    \label{fig:FAB}
+    \includegraphics[width=0.4\textwidth]{FAB.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+No canto superior esquerdo, o botão de navegação proporciona acesso ao \textit{Drawer}, um painel lateral com duas opções: "Início" (retorno à tela principal) e "Configurações" (\autoref{fig:drawer}). A tela de configurações, em sua versão atual, permite a alternância entre temas claro e escuro (\autoref{fig:int-inicial}), com previsão de expansão para personalizações avançadas, como definição de nomes de dispositivos e ajustes dos valores de UUID Bluetooth.
+
+\begin{figure}[ht]
+    \caption{Drawer do aplicativo.}
+    \label{fig:drawer}
+    \centering
+    \subfloat[Botão de acesso ao drawer\label{fig:DrawerButton}]{\includegraphics[width=0.3\textwidth]{DrawerButton.png}}
+    \hfill
+    \subfloat[Drawer aberto\label{fig:open-drawer}]{\includegraphics[width=0.3\textwidth]{open-drawer.png}}
+    \hfill
+    \subfloat[Tela de configurações acessada pelo drawer\label{fig:config-screen}]{\includegraphics[width=0.3\textwidth]{config-screen.png}}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+\subsection{Tela de Parâmetros}\label{subsec:parametros}
+A interface de parâmetros opera em dois modos distintos, conforme o estado de conexão. No modo desconectado (\autoref{fig:par-off}), os campos de entrada permanecem inativos. Quando conectado, os campos assumem codificação cromática dinâmica: tonalidade amarela para indicar valores não sincronizados ou nulos, e azul para valores válidos sincronizados com o ESP32 (\autoref{fig:parameters-state}). Valores fora da faixa operacional ou inconsistentes geram feedback visual impedindo o envio (\autoref{fig:parameters-state}), previnindo possíveis erros de extrapolação dos bytes na comunicação Bluetooth.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Tela de parâmetros em modo desconectado com campos inativos.}
+    \label{fig:par-off}
+    \includegraphics[width=0.32\textwidth]{par-off.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+\begin{figure}[ht]
+    \caption{Estados dos campos de parâmetros.}
+    \label{fig:parameters-state}
+    \centering
+    \subfloat[Campos de parâmetros em estado não sincronizado\label{fig:input-on-yellow}]{\includegraphics[width=0.4\textwidth]{input-on-yellow.png}}
+    \hfill
+    \subfloat[Campos de parâmetros válidos sincronizados\label{fig:input-on-blue}]{\includegraphics[width=0.4\textwidth]{input-on-blue.png}}
+    \hfill
+    \subfloat[Feedback visual para valores fora da faixa operacional\label{fig:out-range}]{\includegraphics[width=0.4\textwidth]{out-range.png}}
+    \hfill
+    \subfloat[Feedback visual para valores nulos\label{fig:null-value}]{\includegraphics[width=0.4\textwidth]{null-value.png}}
+    \hfill
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+
+Para melhor experiência do usuário/operador, o sistema permite o armazenamento das configurações atuais de parâmetros como perfis personalizados ("receitas"), mediante nomeação em diálogo dedicado (\autoref{fig:select-save-recipe}). Essas receitas podem ser recuperadas através do menu do FAB (\autoref{fig:FAB}), que exibe uma lista de opções salvas.
+
+\begin{figure}[ht]
+    \caption{Salvamento e seleção de receitas.}
+    \label{fig:select-save-recipe}
+    \centering
+    \subfloat[Botão de salvamento de receitas\label{fig:save-recipe}]{\includegraphics[width=0.32\textwidth]{save-recipe.png}}
+    \hfill
+    \subfloat[Entrada de nome para salvamento de receita personalizada\label{fig:save-recipe-inputname}]{\includegraphics[width=0.32\textwidth]{save-recipe-inputname.png}}
+    \hfill
+    \subfloat[Seleção de receitas salvas\label{fig:select-recipe}]{\includegraphics[width=0.32\textwidth]{select-recipe.png}}
+    \hfill
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+\subsection{Telas de Monitoramento: Sensores e Atuadores}\label{subsec:monitoramento}
+As telas de sensores (\autoref{fig:sensors}) e atuadores (\autoref{fig:actuators}) cumprem função de monitoramento passivo, sem permitir interações diretas. A primeira exibe dados em tempo real de temperatura, umidade e concentração de CO$_2$, enquanto a segunda apresenta o estado operacional dos componentes físicos (válvulas, resistência, bomba de ar), com indicadores \textit{ON/OFF} gráficos. Ambas integram-se à \textit{BottomAppBar}, mantendo coerência na navegação e permitindo rápida alternância entre telas.
+
+\begin{figure}[ht]
+    \caption{Interface de sensores.}
+    \label{fig:sensors}
+    \centering
+    \subfloat[Interface de sensores em modo desconectado\label{fig:sensores-off}]{\includegraphics[width=0.3\textwidth]{sensores-off.png}}
+    \hfill
+    \subfloat[Interface de sensores em modo conectado\label{fig:sensores-on}]{\includegraphics[width=0.3\textwidth]{sensores-on.png}}
+    \hfill
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+  \begin{figure}[ht]
+    \caption{Interface de atuadores.}
+    \label{fig:actuators}
+    \centering
+    \subfloat[Estado dos atuadores em modo desconectado\label{fig:atuador-off}]{\includegraphics[width=0.3\textwidth]{atuador-off.png}}
+    \hfill
+    \subfloat[Interface de atuadores em modo conectado\label{fig:atuador-on}]{\includegraphics[width=0.3\textwidth]{atuador-on.png}}
+    \hfill
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+
+  \end{figure}
+
+\section{Limitações e trabalhos futuros}
+
+Embora a arquitetura de software tenha sido completamente implementada, o presente trabalho apresenta limitações no que diz respeito à validação prática do sistema. O protótipo físico desenvolvido anteriormente, durante a Iniciação Científica, permanece incompleto em sua estrutura elétrica e nos componentes de automação, o que inviabilizou a realização de testes físicos com os controles implementados.
+  
+Como consequência, os testes foram realizados sem a ativação real dos atuadores. Os sensores AHT20 e ENS160 foram conectados ao sistema e realizaram leituras ambientais reais (\autoref{fig:protoboard}). O comportamento do código foi verificado por meio de mensagens no terminal, confirmando que os trechos responsáveis pelo acionamento de dispositivos estão sendo corretamente executados. Essa abordagem teve como objetivo validar a lógica de controle assíncrona e a estabilidade da comunicação via Bluetooth. A simulação demonstrou-se eficaz para comprovar o funcionamento da arquitetura em condições normais de operação.
+  
+\begin{figure}[ht]
+    \centering
+    \caption{Protoboard montada com o (A) ESP32-C3 e (B) os sensores AHT20+ENS160 para validação das leituras.}
+    \label{fig:protoboard}
+    \includegraphics[width=0.8\textwidth]{protoboard.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+  \end{figure}
+  
+Para trabalhos futuros, recomenda-se:
+  
+  \begin{itemize}
+      \item Finalização do protótipo físico com sensores e atuadores totalmente integrados;
+      \item Avaliação da eficiência do sistema em testes com diferentes perfis de malteação;
+      \item Implementação de novos recursos, como controle de torrefação e exportação de dados históricos.
+  \end{itemize}

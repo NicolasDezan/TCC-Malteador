@@ -4,9 +4,28 @@ O malte é um produto de extrema importância para diversos setores industriais,
 
 A produção de malte, no entanto, enfrenta desafios significativos, especialmente em climas quentes, onde o controle preciso de temperatura, umidade e tempo, durante as etapas de maceração, germinação e secagem, é crucial para garantir a qualidade do produto \cite{KOVALOVA2024}. O controle desses parâmetros torna a malteação um processo complexo, exigindo equipamentos especializados e sistemas automatizados para otimizar a produção. No contexto acadêmico e de pesquisa, a falta de equipamentos acessíveis e confiáveis para malteação em laboratório limita o desenvolvimento de estudos e inovações nesta área, evidenciando a importância de soluções de baixo custo e alta eficiência.
 
-Nesse contexto, um dos principais desafios enfrentados é a falta de equipamentos que permitam a malteação controlada em laboratório, comprometendo a precisão e a reprodutibilidade dos experimentos. Durante uma iniciação científica (IC), foi desenvolvido um protótipo inicial, não finalizado, restando completar a montagem física e desenvolver o sistema de controle e automação. O presente trabalho dá continuidade à IC ao propor uma solução de software responsável por garantir que o processo de malteação ocorra adequadamente.
+Nesse contexto, um dos principais desafios enfrentados é a falta de equipamentos que permitam a malteação controlada em laboratório, comprometendo a precisão e a reprodutibilidade dos experimentos. Durante uma iniciação científica (IC), foi desenvolvido um protótipo inicial (\autoref{fig:malteador}), não finalizado, restando completar a montagem física e desenvolver o sistema de controle e automação. O presente trabalho dá continuidade à IC ao propor uma solução de software responsável por garantir que o processo de malteação ocorra adequadamente.
 
-A proposta visa o desenvolvimento de um sistema baseado no microcontrolador ESP 32 integrado com um aplicativo Android. Esse dispositivo foi escolhido por sua relação custo-benefício, capacidade de processamento e suporte a tecnologias de comunicação como Bluetooth e Wi-Fi. Para seu firmware, optou-se pela linguagem MicroPython, que oferece uma curva de aprendizado suave e é bastante utilizada em projetos de prototipagem rápida e IoT. Já o aplicativo Android foi desenvolvido em Kotlin, garantindo uma interface intuitiva e responsiva. A comunicação entre o firmware e o aplicativo é realizada via Bluetooth Low Energy (BLE), uma tecnologia de baixo consumo energético e amplamente disponível em dispositivos móveis, permitindo a configuração remota e o monitoramento em tempo real dos parâmetros operacionais. Além disso, a documentação dos softwares desenvolvidos pode servir como referência para outros estudos envolvendo Internet das Coisas (IoT) dentro do IFES, especialmente no que se refere à integração entre ESP 32 e Android.
+\begin{figure}[ht]
+    \centering
+    \caption{Protótipo desenvolvido durante a IC.}
+    \label{fig:malteador}
+    \includegraphics[width=0.8\textwidth]{Vista Lateral do Malteador.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+A proposta visa o desenvolvimento de um sistema baseado no microcontrolador ESP32 (\autoref{fig:esquemaeletronico}) integrado com um aplicativo Android. Esse dispositivo foi escolhido por sua relação custo-benefício, capacidade de processamento e suporte a tecnologias de comunicação como Bluetooth e Wi-Fi. Para seu firmware, optou-se pela linguagem MicroPython, que oferece uma curva de aprendizado suave e é bastante utilizada em projetos de prototipagem rápida e IoT. Já o aplicativo Android foi desenvolvido em Kotlin, garantindo uma interface intuitiva e responsiva. A comunicação entre o firmware e o aplicativo é realizada via Bluetooth Low Energy (BLE), uma tecnologia de baixo consumo energético e amplamente disponível em dispositivos móveis, permitindo a configuração remota e o monitoramento em tempo real dos parâmetros operacionais. Além disso, a documentação dos softwares desenvolvidos pode servir como referência para outros estudos envolvendo Internet das Coisas (IoT) dentro do IFES, especialmente no que se refere à integração entre ESP32 e Android.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Esquema eletrônico do malteador desenvolvido durante a IC: (A) relés para atuação das válvulas, (B) relés para atuação do motor e da resistência elétrica, (C) sensor AHT20+ENS160, (D) painel LCD, (E) botão de emergência, (F) microcontrolador ESP32}
+    \label{fig:esquemaeletronico}
+    \includegraphics[width=0.8\textwidth]{esquemaeletronico.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
 
 Este trabalho surge a partir da demanda do Laboratório de Análises de Cerveja e Matérias-Primas (LACEMP), que busca iniciar estudos experimentais sobre o processo de malteação. A ausência de um equipamento adequado e acessível para pesquisas acadêmicas motivou o desenvolvimento de um sistema que permita monitorar e controlar as variáveis do processo de forma precisa e reprodutível. 
 

@@ -28,6 +28,16 @@ A separação funcional foi estendida no diretório \texttt{tasks}, onde cada m�
 \subsection{Algoritmos de Controle do Processo de Malteação}
 A sequência de maceração, germinação e secagem foi modelada no subdiretório \texttt{malting\_stages} em módulos especializados (\texttt{steeping.py}, \texttt{germination.py}, \texttt{kilning.py}). Cada etapa opera como uma corrotina independente, monitorando variáveis críticas com base nas condicionais dos parâmetros recebidos via Bluetooth. A estrutura assíncrona permitiu a execução não bloqueante desses processos, essencial para a continuidade da comunicação Bluetooth mesmo durante o processo. As lógicas de marcação de tempo foram desenvolvidas com o uso do módulo utilitário \texttt{uptime.py}, que se baseia no tempo total de execução do dispositivo.
 
+\begin{figure}[ht]
+    \centering
+    \caption{Fluxograma do controle planejado para o algoritmo de malteação.}
+    \label{fig:logicamalteacao}
+    \includegraphics[width=1.0\textwidth]{logicamalteacao.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+
 
 % Esta estrutura modular e documentada, combinada com o versionamento no GitHub, não apenas atende aos requisitos imediatos de controle do malteador, mas serve como modelo reutilizável para outros sistemas de automação laboratorial na instituição, objetivo explícito do trabalho conforme estabelecido no escopo pedagógico do LACEMP-IFES.
 
@@ -49,16 +59,14 @@ Visando a manutenibilidade, o projeto empregou o padrão de injeção de depend�
 
 A comunicação com o hardware ESP32 foi implementada através da API Android Bluetooth Low Energy (BLE), utilizando o padrão GATT para transferência de dados. Desenvolveu-se um serviço em segundo plano para gerenciamento assíncrono da conexão, capaz de manter a estabilidade da ligação mesmo durante mudanças de estado do aplicativo. Para persistência local, implementou-se um repositório combinando SQLite (via Room) para armazenamento de receitas e DataStore para armazenamento das preferências do usuário, como o tema do aplicativo (escuro ou claro).
 
-\subsection{Compilação}
+% \subsection{Compilação}
 
-!!!TODO Em algum momento eu realmente preciso compilar esse aplicativo pra .apk!!!
-
-
+% !!!TODO Em algum momento eu realmente preciso compilar esse aplicativo pra .apk!!!
 
 \section{Documentação}
 A gestão do código foi implementada mediante a utilização do sistema de controle de versão Git, com hospedagem pública em dois repositórios GitHub dedicados: um para o firmware \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl.git} e outro para o aplicativo Android \url{https://github.com/NicolasDezan/MALT-ESP.git}. A separação em repositórios distintos buscou garantir a modularidade entre os componentes de software, além de facilitar a manutenção independente de cada projeto.
 
-\subsection{Tutoriais}
-Talvez eu grave tutoriais mostrando os códigos e o sistema funcionando etc etc etc
-Se sobrar tempo e se os videos ficarem legais eu vou incluir uma fala do tipo:
-A documentação técnica incluiu tutoriais em vídeo externos (links no arquivo \texttt{README.md}) detalhando processos críticos como configuração inicial do ESP32-C3 e emparelhamento Bluetooth.
+% \subsection{Tutoriais}
+% Talvez eu grave tutoriais mostrando os códigos e o sistema funcionando etc etc etc
+% Se sobrar tempo e se os videos ficarem legais eu vou incluir uma fala do tipo:
+% A documentação técnica incluiu tutoriais em vídeo externos (links no arquivo \texttt{README.md}) detalhando processos críticos como configuração inicial do ESP32-C3 e emparelhamento Bluetooth.
