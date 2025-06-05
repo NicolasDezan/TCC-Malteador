@@ -32,7 +32,16 @@ A lógica central do firmware foi desenvolvida no arquivo \texttt{main.py}, onde
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
 
-A separação funcional foi estendida no diretório \texttt{tasks}, onde cada módulo encapsula comportamentos específicos: \texttt{parameters\_task.py} gerencia atualizações dinâmicas de parâmetros operacionais, enquanto \texttt{task\_handler.py} implementa um padrão de mediador para roteamento de comandos baseado no primeiro byte dos pacotes recebidos.
+A tarefa \texttt{read\_task} fica aguardando o recebimento de \textit{bytes}. Quando um pacote é recebido, essa tarefa delega o tratamento dos dados para \texttt{task\_handler}, que, por sua vez, direciona os dados para outros módulos de acordo com o primeiro \textit{byte} do \textit{array} (lista). Por exemplo, ilustrado pela \autoref{fig:ReadTaskDrawio}, se o primeiro \textit{byte} for igual a 1, vai acionar o módulo de alteração dos parâmetros, que são utilizados para a realização da malteação — que é iniciada quando o \textit{array} inicia com 255.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Lógica do recebimento de comandos do dispositivo}
+    \label{fig:ReadTaskDrawio}
+    \includegraphics[width=1.0\textwidth]{ReadTask.drawio.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
 
 \subsection{Algoritmos de Controle do Processo de Malteação}
 A sequência de maceração, germinação e secagem foi modelada no subdiretório \texttt{malting\_stages} em módulos especializados (\texttt{steeping.py}, \texttt{germination.py}, \texttt{kilning.py}). Cada etapa opera como uma corrotina independente, monitorando variáveis críticas com base nas condicionais dos parâmetros recebidos via Bluetooth. A estrutura assíncrona permitiu a execução não bloqueante desses processos, essencial para a continuidade da comunicação Bluetooth mesmo durante o processo. As lógicas de marcação de tempo foram desenvolvidas com o uso do módulo utilitário \texttt{uptime.py}, que se baseia no tempo total de execução do dispositivo.
