@@ -159,10 +159,30 @@ Outro caso representativo foi descrito por \citeonline{dhingra2019internet}, que
 
 O Kotlin se destaca como uma linguagem moderna, concisa, segura e pragmática, oferecendo total interoperabilidade com código Java, o que facilita a migração e a integração de projetos legados \cite{JEMEROV2017}. Atualmente, é amplamente adotado como a principal linguagem para o desenvolvimento de aplicativos móveis na plataforma Android, proporcionando maior produtividade e reduzindo a incidência de erros comuns durante a programação. Essa adoção é fortalecida pela integração nativa do Kotlin no \textit{Android Studio}, ambiente de desenvolvimento oficial mantido pelo Google, que fornece ferramentas específicas para facilitar a escrita, o teste e a depuração de aplicativos Android \cite{ANDROIDSTUDIO}.
 
-\subsection{Bluetooth}
+\subsection{Bluetooth Low Energy}
 
-A plataforma Android oferece suporte a diferentes protocolos de comunicação via Bluetooth, incluindo o Bluetooth Low Energy (BLE), possibilitando a conexão eficiente com dispositivos como o ESP32 \cite{android_bluetooth_overview}.
+A plataforma Android oferece suporte a diferentes protocolos de comunicação via Bluetooth, incluindo o Bluetooth Low Energy (BLE), uma tecnologia especialmente adequada para conexões eficientes com dispositivos de baixo consumo energético, como o ESP32 \cite{android_bluetooth_overview}.
 
-O BLE foi desenvolvido como uma extensão do Bluetooth clássico, com o objetivo de reduzir significativamente o consumo de energia sem comprometer a conectividade \cite{heydon2012bluetooth}. Essa tecnologia é utilizada em aplicações que exigem comunicação contínua com baixo consumo energético. No contexto da automação e do monitoramento remoto, a integração entre Android e ESP32 via BLE permite a troca eficiente de dados em tempo real, viabilizando aplicações que demandam conectividade sem a necessidade de conexões Wi-Fi ou a cabo.
+Desenvolvido como uma evolução do Bluetooth clássico, o BLE foi projetado para reduzir significativamente o consumo de energia sem comprometer a conectividade \cite{heydon2012bluetooth}. Essa característica o torna ideal para aplicações que demandam comunicação contínua com eficiência energética, como sistemas de automação e monitoramento remoto. Nesse contexto, a integração entre dispositivos Android (como smartphones) e microcontroladores (como o ESP32) via BLE viabiliza a troca de dados em tempo real, dispensando a necessidade de conexões Wi-Fi ou cabos.
 
-% Detalhar protocolo de comunicação BLE
+A comunicação BLE baseia-se em uma arquitetura assimétrica, envolvendo dois tipos de dispositivos: o \textit{central} (por exemplo, um smartphone Android) e o \textit{periférico} (como o ESP32). Como ilustrado na \autoref{fig:ConexaoBLE}, o processo inicia-se com o envio de pacotes de anúncio (\textit{advertising packets}) pelo periférico, que sinaliza sua disponibilidade. O dispositivo central, ao realizar uma varredura (\textit{scanning}), detecta esses pacotes e pode solicitar uma conexão. Uma vez estabelecido o pareamento, o central identifica os serviços disponíveis no periférico e inicia a troca estruturada de dados. Além disso, esse modelo permite que o periférico otimize o consumo de energia, mantendo seu rádio desligado durante períodos de inatividade, enquanto o central assume as operações mais complexas \cite{bluetoothLEprimer2024}.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Ilustração da conexão BLE de um dispositivo periférico (ESP32) com um celular (Android)}
+    \label{fig:ConexaoBLE}
+    \includegraphics[width=0.8\textwidth]{ConexaoBLE.drawio.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+A estrutura do BLE é organizada em camadas, com destaque para o perfil GATT (\textit{Generic Attribute Profile}), responsável pela organização e transmissão dos dados após a conexão. No GATT, as informações são agrupadas em serviços, que contêm características individuais identificadas por UUIDs (\textit{Universally Unique Identifiers}). Por exemplo, um serviço dedicado a medições de temperatura pode incluir uma característica específica para o valor da leitura. A \autoref{fig:gattestrutura} detalha essa hierarquia, mostrando como os perfis são compostos por serviços e características, cada uma com propriedades definidas (como leitura, escrita ou notificação). Essa padronização permite que dispositivos centrais, como smartphones Android, acessem dados de forma consistente, independentemente do periférico utilizado \cite{bleGATT}.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Hierarquia GATT}
+    \label{fig:gattestrutura}
+    \includegraphics[width=0.6\textwidth]{BLE.png}
+
+    {\centering\footnotesize Fonte: Bluetooth.\par}
+\end{figure}
