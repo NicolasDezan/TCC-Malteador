@@ -2,26 +2,35 @@
 
 \section{Desenvolvimento do Firmware}
 \subsection{Ambiente de Desenvolvimento}
-O firmware foi desenvolvido para a placa ESP32C3 Module utilizando o interpretador MicroPython na versão 1.24.1. A instalação do firmware foi realizada através do Thonny IDE, ferramenta que também permitiu a transferência dos scripts Python para a memória do dispositivo.
+O firmware foi desenvolvido para a placa WeAct ESP32-C3FH4, baseada no microcontrolador ESP32-C3 da Espressif (China), que opera com arquitetura RISC-V de 32 bits, frequência de até 160 MHz, 400 kB de RAM, 384 kB de ROM, 4 MB de FLASH e até 22 pinos GPIO programáveis \cite{weact_esp32c3}. Foi utilizada a linguagem MicroPython na versão 1.24.1, compatível com a arquitetura da placa, cuja imagem de firmware foi obtida no site oficial do projeto \cite{micropython_esp32c3_download}. A gravação do firmware e a transferência dos scripts foram realizadas por meio da Thonny IDE, comumente adotado para aplicações com MicroPython \cite{thonny_ide}.
 
 \subsection{Estruturação do Projeto e Modularização}
-A arquitetura do firmware foi organizada em três diretórios principais (\texttt{lib}, \texttt{data}, \texttt{tasks}) complementados pelo arquivo \texttt{main.py}, que coordena a inicialização do sistema. No diretório \texttt{lib}, foram alocadas bibliotecas específicas, incluindo a \texttt{aioble} para gestão simplificada do Bluetooth Low Energy (BLE), estratégia que reduziu a complexidade de implementação das operações de comunicação. O subdiretório \texttt{utils} concentrou módulos auxiliares como \texttt{bluetooth\_config.py} para definição de parâmetros de conexão e \texttt{data\_converter.py} para serialização de dados, garantindo comunicação correta com o aplicativo Android.
+A arquitetura do firmware foi organizada em três diretórios principais (\texttt{lib}, \texttt{data}, \texttt{tasks}) complementados pelo arquivo \texttt{main.py}, responsável por coordenar a inicialização do sistema. No diretório \texttt{lib}, foram alocadas bibliotecas específicas, incluindo a \texttt{aioble}, uma biblioteca recomendada pela própria documentação do MicroPython para a maioria das aplicações com Bluetooth Low Energy (BLE) \cite{micropython_ble_docs}. Essa biblioteca abstrai a complexidade das operações de conexão, emparelhamento e troca de dados via GATT, facilitando a implementação de servidores BLE no ESP32-C3 \cite{aioble_repo}. O subdiretório \texttt{utils} concentrou módulos auxiliares, como \texttt{bluetooth\_config.py}, para definição de parâmetros de conexão, e \texttt{data\_converter.py}, para serialização dos dados trocados com o aplicativo Android.
 
-A persistência de configurações operacionais foi implementada no diretório \texttt{data} através do arquivo \texttt{config.json}, complementado por um conjunto de valores padrão em \texttt{default\_data.py} como mecanismo de segurança para cenários de corrupção de dados salvos. Essa abordagem assegurou estabilidade na inicialização do sistema mesmo em condições adversas, crítica para operações autônomas.
+A persistência de configurações operacionais foi implementada no diretório \texttt{data} através do arquivo \texttt{config.json}, complementado por um conjunto de valores padrão em \texttt{default\_data.py} como mecanismo de segurança para cenários de corrupção de dados salvos.
 
 \subsection{Gestão de Tarefas Assíncronas}
 A lógica central do firmware foi desenvolvida no arquivo \texttt{main.py}, onde foram instanciadas cinco corrotinas principais utilizando o módulo \texttt{asyncio} do MicroPython. A função \texttt{main()} coordena:
 
 \begin{itemize}
 
-\item \texttt{peripheral\_task()}, responsável pelo ciclo de vida das conexões BLE;
-\item \texttt{send\_heartbeat\_task()}, que emite pacotes de sincronização a cada 2 segundos contendo métricas de integridade do sistema utilizando o módulo utilitário \texttt{memory\_usage.py};
-\item \texttt{read\_task()}, dedicada ao processamento de dados recebidos via Bluetooth com despacho para handlers especializados;
-\item \texttt{malting\_task()}, núcleo do controle do processo de malteação.
-\item \texttt{sensors\_task()}, que gerencia a leitura periódica dos sensores instalados.
+    \item \texttt{peripheral\_task()}, responsável pelo ciclo de vida das conexões BLE;
+    \item \texttt{send\_heartbeat\_task()}, que emite pacotes de sincronização a cada 2 segundos contendo métricas de integridade do sistema utilizando o módulo utilitário \texttt{memory\_usage.py};
+    \item \texttt{read\_task()}, dedicada ao processamento de dados recebidos via Bluetooth com despacho para handlers especializados;
+    \item \texttt{malting\_task()}, núcleo do controle do processo de malteação.
+    \item \texttt{sensors\_task()}, que gerencia a leitura periódica dos sensores instalados.
 
 
 \end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \caption{Esquema geral do projeto com as tarefas assíncronas em evidência}
+    \label{fig:TarefasAssincronasFluxograma}
+    \includegraphics[width=1.0\textwidth]{TarefasAssincronas.drawio.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
 
 A separação funcional foi estendida no diretório \texttt{tasks}, onde cada módulo encapsula comportamentos específicos: \texttt{parameters\_task.py} gerencia atualizações dinâmicas de parâmetros operacionais, enquanto \texttt{task\_handler.py} implementa um padrão de mediador para roteamento de comandos baseado no primeiro byte dos pacotes recebidos.
 
@@ -45,7 +54,7 @@ A sequência de maceração, germinação e secagem foi modelada no subdiretóri
 \section{Desenvolvimento do Aplicativo}
 \subsection{Ambiente e Ferramentas de Desenvolvimento}
 
-O ambiente de desenvolvimento foi estabelecido utilizando a IDE Android Studio (Koala Feature Drop - 2024.1.2) com linguagem Kotlin na versão 1.9.10. Os testes foram conduzidos em um dispositivo físico com Android 14 (One UI 6.1), garantindo compatibilidade com as APIs mais recentes do sistema operacional. Escolheu-se o ecossistema Android Jetpack como base tecnológica devido a sua estabilidade e suporte oficial da plataforma Google para desenvolvimento de aplicativos.
+O ambiente de desenvolvimento foi estabelecido utilizando a IDE Android Studio (Koala Feature Drop - 2024.1.2) com linguagem Kotlin na versão 1.9.10. Os testes foram conduzidos em um dispositivo físico com Android 14, garantindo compatibilidade com as APIs mais recentes do sistema operacional. Escolheu-se o ecossistema Android Jetpack como base tecnológica devido a sua estabilidade e suporte oficial da plataforma Google para desenvolvimento de aplicativos.
 
 \subsection{Arquitetura e Padrões de Projeto}
 
