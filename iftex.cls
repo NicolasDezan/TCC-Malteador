@@ -54,6 +54,23 @@
 \usepackage{parskip}            % espaçamento entre os parágrafos
 \usepackage{xcolor}
 \usepackage{listings}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    stringstyle=\color{green!60!black},
+    commentstyle=\color{gray},
+    morecomment=[l][\color{magenta}]{\#},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    frame=single,
+    breaklines=true
+}
+
 % \usepackage[caption=false,position=b,font=normalsize]{subfig}
 \usepackage[caption=false,font=normalsize]{subfig}
 \usepackage{etoolbox}
@@ -579,7 +596,7 @@
 \definecolor{keywordcolour}{RGB}{249,38,114}
 \definecolor{stringcolour}{RGB}{255,102,0}
 
-\renewcommand\lstlistingname{Algoritimo} 
+\renewcommand\lstlistingname{Algoritmo} 
 \lstdefinestyle{mystyle}{
   backgroundcolor=\color{backcolour},   
   commentstyle=\color{commentcolour},
@@ -599,6 +616,23 @@
   showtabs=false,                  
   tabsize=4,
   linewidth=79em
+}
+
+\lstdefinestyle{kotlinstyle}{
+    language=Java,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    stringstyle=\color{green!60!black},
+    commentstyle=\color{gray},
+    morecomment=[l][\color{magenta}]{//},
+    morekeywords={fun, val, var, suspend, data, object, lateinit, override, when, is, as, in, out},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    frame=single,
+    breaklines=true
 }
  
 \lstset{style=mystyle}

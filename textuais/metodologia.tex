@@ -38,7 +38,7 @@ A tarefa \texttt{read\_task} fica aguardando o recebimento de \textit{bytes}. Qu
     \centering
     \caption{Lógica do recebimento de comandos do dispositivo}
     \label{fig:ReadTaskDrawio}
-    \includegraphics[width=1.0\textwidth]{ReadTask.drawio.png}
+    \includegraphics[width=0.7\textwidth]{ReadTask.drawio.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
@@ -48,18 +48,14 @@ A sequência de maceração, germinação e secagem foi modelada no subdiretóri
 
 \begin{figure}[ht]
     \centering
-    \caption{Fluxograma do controle planejado para o algoritmo de malteação.}
+    \caption{Fluxograma do controle planejado para o algoritmo de malteação}
     \label{fig:logicamalteacao}
     \includegraphics[width=1.0\textwidth]{logicamalteacao.png}
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
 
-
-
-% Esta estrutura modular e documentada, combinada com o versionamento no GitHub, não apenas atende aos requisitos imediatos de controle do malteador, mas serve como modelo reutilizável para outros sistemas de automação laboratorial na instituição, objetivo explícito do trabalho conforme estabelecido no escopo pedagógico do LACEMP-IFES.
-
-
+  
 \section{Desenvolvimento do Aplicativo}
 \subsection{Ambiente e Ferramentas de Desenvolvimento}
 
@@ -67,19 +63,18 @@ O ambiente de desenvolvimento foi estabelecido utilizando a IDE Android Studio (
 
 \subsection{Arquitetura e Padrões de Projeto}
 
-Adotou-se uma arquitetura em camadas conforme as diretrizes de boas práticas do Android Moderno, estruturada em três módulos principais: \textit{data}, \textit{domain} e \textit{presentation}. O módulo \textit{data} concentra a gestão de fluxos de informação, incluindo comunicação Bluetooth e operações de banco de dados local através das bibliotecas Room e DataStore. Na camada \textit{domain}, implementou-se a lógica de negócios e tratamento de dados, incluindo a normalização de parâmetros de processo e validação de entradas. A camada de \textit{presentation} foi desenvolvida com Jetpack Compose, seguindo os princípios de Design Material 3 para se obter uma interface intuitiva.
+Adotou-se uma arquitetura em camadas conforme as diretrizes de boas práticas do Android Moderno, estruturada em três módulos principais: \textit{data}, \textit{domain} e \textit{presentation}. O módulo \textit{data} concentra a gestão de fluxos de informação, incluindo a comunicação \textit{Bluetooth} e o armazenamento local de dados, implementado com o uso das bibliotecas \textit{Room} e \textit{DataStore}. A \textit{Room} é uma biblioteca de que facilita o acesso a bancos SQLite no sistema Android \cite{android_room}. Já a \textit{DataStore} é projetada para armazenar preferências e pequenas quantidades de dados de forma mais eficiente \cite{android_datastore}.
 
-\subsection{Modularização e Injeção de Dependências}
+Na camada \textit{domain}, implementou-se a lógica de negócios e o tratamento de dados. Por fim, a camada de \textit{presentation} foi construída com \textit{Jetpack Compose}, utilizando os princípios do \textit{Design Material 3} que define diretrizes de usabilidade, hierarquia visual e acessibilidade para o desenvolvimento de interfaces \cite{material3}.
 
-Visando a manutenibilidade, o projeto empregou o padrão de injeção de dependências através da biblioteca Dagger Hilt. Esta abordagem permitiu a desacoplamento entre componentes, promovendo melhor a manutenibilidade do projeto como um todo. 
+\begin{figure}[ht]
+    \centering
+    \caption{Diagrama da arquitetura em camadas}
+    \label{fig:layerarch}
+    \includegraphics[width=0.6\textwidth]{layerarch.png}
 
-\subsection{Integração Bluetooth e Gestão de Dispositivos}
-
-A comunicação com o hardware ESP32 foi implementada através da API Android Bluetooth Low Energy (BLE), utilizando o padrão GATT para transferência de dados. Desenvolveu-se um serviço em segundo plano para gerenciamento assíncrono da conexão, capaz de manter a estabilidade da ligação mesmo durante mudanças de estado do aplicativo. Para persistência local, implementou-se um repositório combinando SQLite (via Room) para armazenamento de receitas e DataStore para armazenamento das preferências do usuário, como o tema do aplicativo (escuro ou claro).
-
-% \subsection{Compilação}
-
-% !!!TODO Em algum momento eu realmente preciso compilar esse aplicativo pra .apk!!!
+    {\centering\footnotesize Fonte: Developers Android.\par}
+\end{figure}
 
 \section{Documentação}
 A gestão do código foi implementada mediante a utilização do sistema de controle de versão Git, com hospedagem pública em dois repositórios GitHub dedicados: um para o firmware \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl.git} e outro para o aplicativo Android \url{https://github.com/NicolasDezan/MALT-ESP.git}. A separação em repositórios distintos buscou garantir a modularidade entre os componentes de software, além de facilitar a manutenção independente de cada projeto.

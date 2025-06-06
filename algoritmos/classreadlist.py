@@ -1,0 +1,10 @@
+class ReadList:
+    CHANGE_PARAMETERS = 0
+    SEND_PARAMETERS = 1
+    START_PROCESS = 255
+
+class WriteList:
+    SEND_PARAMETERS = 1
+    SENSOR_VALUES = 2
+    SEND_ACTUATORS = 3
+    HEARTBEAT = 255
