@@ -13,5 +13,3 @@ async def send_heartbeat_task():
         await asyncio.sleep(1)
         send_actuators_state()
         await asyncio.sleep(1)
-
-        classreadlist

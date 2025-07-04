@@ -54,22 +54,9 @@
 \usepackage{parskip}            % espaçamento entre os parágrafos
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{float}
+\usepackage{needspace} % no preâmbulo
 
-\lstdefinestyle{pythonstyle}{
-    language=Python,
-    basicstyle=\ttfamily\footnotesize,
-    keywordstyle=\color{blue},
-    stringstyle=\color{green!60!black},
-    commentstyle=\color{gray},
-    morecomment=[l][\color{magenta}]{\#},
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=10pt,
-    showstringspaces=false,
-    frame=single,
-    breaklines=true
-}
 
 % \usepackage[caption=false,position=b,font=normalsize]{subfig}
 \usepackage[caption=false,font=normalsize]{subfig}
@@ -529,7 +516,7 @@
 \newcommand{\quadroname}{Quadro}
 \newcommand{\listofquadrosname}{Lista de Quadros}
 
-\newfloat[chapter]{quadro}{loq}{\quadroname}
+% \newfloat[chapter]{quadro}{loq}{\quadroname}
 \newlistof{listofquadros}{loq}{\listofquadrosname}
 \newlistentry{quadro}{loq}{0}
 
@@ -618,23 +605,6 @@
   linewidth=79em
 }
 
-\lstdefinestyle{kotlinstyle}{
-    language=Java,
-    basicstyle=\ttfamily\footnotesize,
-    keywordstyle=\color{blue},
-    stringstyle=\color{green!60!black},
-    commentstyle=\color{gray},
-    morecomment=[l][\color{magenta}]{//},
-    morekeywords={fun, val, var, suspend, data, object, lateinit, override, when, is, as, in, out},
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=10pt,
-    showstringspaces=false,
-    frame=single,
-    breaklines=true
-}
- 
 \lstset{style=mystyle}
 
 % ------------------------------------------------------------------------------- %

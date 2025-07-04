@@ -46,16 +46,6 @@ A tarefa \texttt{read\_task} fica aguardando o recebimento de \textit{bytes}. Qu
 \subsection{Algoritmos de Controle do Processo de Malteação}
 A sequência de maceração, germinação e secagem foi modelada no subdiretório \texttt{malting\_stages} em módulos especializados (\texttt{steeping.py}, \texttt{germination.py}, \texttt{kilning.py}). Cada etapa opera como uma corrotina independente, monitorando variáveis críticas com base nas condicionais dos parâmetros recebidos via Bluetooth. A estrutura assíncrona permitiu a execução não bloqueante desses processos, essencial para a continuidade da comunicação Bluetooth mesmo durante o processo. As lógicas de marcação de tempo foram desenvolvidas com o uso do módulo utilitário \texttt{uptime.py}, que se baseia no tempo total de execução do dispositivo.
 
-\begin{figure}[ht]
-    \centering
-    \caption{Fluxograma do controle planejado para o algoritmo de malteação}
-    \label{fig:logicamalteacao}
-    \includegraphics[width=1.0\textwidth]{logicamalteacao.png}
-
-    {\centering\footnotesize Fonte: Autoria própria.\par}
-\end{figure}
-
-  
 \section{Desenvolvimento do Aplicativo}
 \subsection{Ambiente e Ferramentas de Desenvolvimento}
 
@@ -76,10 +66,30 @@ Na camada \textit{domain}, implementou-se a lógica de negócios e o tratamento 
     {\centering\footnotesize Fonte: Developers Android.\par}
 \end{figure}
 
-\section{Documentação}
-A gestão do código foi implementada mediante a utilização do sistema de controle de versão Git, com hospedagem pública em dois repositórios GitHub dedicados: um para o firmware (acesso em: \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl.git}) e outro para o aplicativo Android (acesso em: \url{https://github.com/NicolasDezan/MALT-ESP.git}). A separação em repositórios distintos buscou garantir a modularidade entre os componentes de software, além de facilitar a manutenção independente de cada projeto.
+\section{Documentação e Testes}
+A gestão do código foi implementada por meio do sistema de controle de versão Git, com hospedagem pública em dois repositórios dedicados no GitHub: um para o \textit{firmware} \footnote{Disponível em: \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl.git}. Acesso em: 03 jul. 2025.} e outro para o aplicativo Android.\footnote{Disponível em: \url{https://github.com/NicolasDezan/MALT-ESP.git}. Acesso em: 03 jul. 2025.} A separação em repositórios distintos buscou facilitar a manutenção independente de cada projeto.
 
-% \subsection{Tutoriais}
-% Talvez eu grave tutoriais mostrando os códigos e o sistema funcionando etc etc etc
-% Se sobrar tempo e se os videos ficarem legais eu vou incluir uma fala do tipo:
-% A documentação técnica incluiu tutoriais em vídeo externos (links no arquivo \texttt{README.md}) detalhando processos críticos como configuração inicial do ESP32-C3 e emparelhamento Bluetooth.
+A primeira versão estável do aplicativo Android foi compilada e identificada com a \textit{tag} \texttt{v1.0}. O executável \texttt{.apk} (formato de arquivo que, ao ser executado em um dispositivo Android, instala o aplicativo) está disponível para \textit{download} no repostório GitHub.\footnote{Disponível em: \url{https://github.com/NicolasDezan/MALT-ESP/releases/tag/v1.0}. Acesso em: 03 jul. 2025.}
+
+Após a implementação de todas as funcionalidades previstas para o \textit{firmware}, criou-se um módulo de testes com a leitura dos sensores desativada e com o tempo de processo acelerado. Essa versão simulada, identificada pela \textit{tag} \texttt{v1.0-sim}, está marcada como \texttt{release} no GitHub.\footnote{Disponível em: \url{https://github.com/NicolasDezan/ESP32C3-MaltingControl/releases/tag/v1.0-sim}. Acesso em: 03 jul. 2025.} As portas do ESP32 utilizadas nessa versão foram programadas de acordo com a Tabela~\ref{tab:atuadores}.
+
+Durante a execução desse módulo, foi realizada uma simulação completa do processo, utilizando o aplicativo Android para envio e acompanhamento das etapas. A sessão foi registrada em vídeo, demonstrando o comportamento do sistema em tempo real. O vídeo está disponível publicamente no YouTube.\footnote{Vídeo da simulação disponível em: \url{https://www.youtube.com/watch?v=bRf2SSRSpRA}. Acesso em: 03 jul. 2025.}
+
+\begin{table}[H]
+    \caption{Associação entre atuadores e portas no módulo de testes}
+    \label{tab:atuadores}
+    \centering
+    \begin{tabular}{>{\bfseries}c p{10cm}}
+        \hline
+        Porta Digital & Atuador Simulado \\
+        \hline
+        6  & Relé da Válvula de Saída \\
+        7  & Relé do Motor de Rotação \\
+        8  & Relé da Resistência de Aquecimento \\
+        9  & Relé do Compressor de Ar \\
+        10 & Relé da Válvula de Entrada \\
+        \hline
+    \end{tabular}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{table}

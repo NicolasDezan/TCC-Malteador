@@ -7,39 +7,34 @@ A comunicação entre o firmware e o aplicativo é realizada por meio do BLE, a 
 
 Para isso, optou-se por transmitir dados diretamente no formato \texttt{byte}, o que, por consequência, permite o envio de até 20 valores distintos em um único pacote. Essa abordagem, no entanto, limita os valores possíveis ao intervalo de 0 a 255, conforme a representação padrão de um \texttt{byte}. Em situações onde foi necessário ultrapassar esse limite, foi implementada uma lógica de fragmentação dos dados, permitindo a representação de valores mais elevados por meio da combinação de dois ou mais bytes. Com esse método, tornou-se possível transmitir qualquer número, com precisão suficiente para valores decimais simples.
 
-Essa lógica foi aplicada, por exemplo, na transmissão da informação referente ao percentual de uso da memória RAM, que exige a representação de números com casas decimais. Nessa aplicação específica, o valor percentual é multiplicado por 100 e, em seguida, dividido em dois bytes para envio, sendo reconstituído com a operação inversa no aplicativo receptor (\autoref{lst:sendheartbeat}).
-
-\lstinputlisting[
-    language=Python,
-    caption=Tarefa periódica de envio de heartbeat,
-    label={lst:sendheartbeat}
-    ]{algoritmos/send-heartbeat-task.py}
+Essa lógica foi aplicada, por exemplo, na transmissão da informação referente ao percentual de uso da memória RAM, que exige a representação de números com casas decimais. Nessa aplicação específica, o valor percentual é multiplicado por 100 e, em seguida, dividido em dois bytes para envio, sendo reconstituído com a operação inversa no aplicativo receptor.
 
 A estratégia de triagem dos dados recebidos parte da utilização do primeiro byte do pacote como identificador, permitindo a categorização e o encaminhamento adequado de cada mensagem. Para facilitar essa operação e melhorar a legibilidade do código, foram implementadas duas classes – \texttt{ReadList} e \texttt{WriteList} – que reservam os 256 valores possíveis para identificadores (\autoref{lst:classreadlist}). Essa abordagem permite que cada valor atribuído seja mapeado a uma ação específica, otimizando o fluxo de comunicação entre o \textit{firmware} e o aplicativo.
 
-Para exemplificar, na função \texttt{def send\_heartbeat\_task()} (\autoref{lst:sendheartbeat}), a variável \texttt{message} representa um \textit{array} construído por meio da classe \texttt{WriteList}, de onde é extraído o identificador correspondente. Este identificador é utilizado no aplicativo receptor para direcionar o tratamento da mensagem, garantindo a correta interpretação dos dados enviados.
+A \autoref{fig:Tabela-bytes} apresenta duas tabelas que organizam visualmente todos os comandos e tipos de dados trocados. Do ponto de vista do microcontrolador, ele basicamente recebe comandos, com exceção da \textit{Change Parameters}, que também inclui os novos valores de parâmetros a serem atribuídos. No envio, o microcontrolador estrutura os pacotes com identificadores específicos, permitindo que o aplicativo saiba exatamente como interpretar cada dado com base na tabela apresentada.
 
+\begin{figure}
+    \centering
+    \caption{Triagem dos pacotes enviados e recebidos pelo microcontrolador}
+    \label{fig:Tabela-bytes}
+    \includegraphics[width=1.0\textwidth]{Tabela-bytes.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+Para exemplificar, na função de envio do \textit{heartbeat}, a variável \texttt{message}, em que se constrói o pacote a ser enviado, representa um \textit{array} construído por meio da classe \texttt{WriteList}, de onde é extraído o identificador correspondente. Este identificador é utilizado no aplicativo receptor para direcionar o tratamento da mensagem, garantindo a correta interpretação dos dados enviados.
+
+\begin{figure}[H]
 \lstinputlisting[
     language=Python,
     caption=Definição de constantes de identifação de pacote,
     label={lst:classreadlist}
     ]{algoritmos/classreadlist.py}
-  
-A lógica de comunicação implementada no aplicativo Android segue o mesmo princípio de identificação adotado no firmware. O primeiro byte do pacote recebido é utilizado como identificador, sendo interpretado para direcionar o tratamento adequado dos dados (\autoref{lst:appkotlindata}). Por exemplo, quando esse identificador assume o valor 255, entende-se que o pacote refere-se ao sinal de \textit{heartbeat} enviado periodicamente pelo ESP32, contendo também o percentual de uso da memória RAM (\autoref{lst:condicionaldereceberusodememoria}).
+\end{figure}   
 
-\lstinputlisting[
-    language=Python,
-    caption=Seção de triagem dos dados recebidos (aplicativo),
-    label={lst:appkotlindata}
-    ]{algoritmos/data-handling.kt}
+A lógica de comunicação implementada no aplicativo Android segue o mesmo princípio de identificação adotado no firmware. O primeiro byte do pacote recebido é utilizado como identificador, sendo interpretado para direcionar o tratamento adequado dos dados. Por exemplo, quando esse identificador assume o valor 255, entende-se que o pacote refere-se ao sinal de \textit{heartbeat} enviado periodicamente pelo ESP32, contendo também o percentual de uso da memória RAM e o estado atual do processo codificado.
 
-\lstinputlisting[
-    language=Python,
-    caption=Tratamento do pacote identificado com '255',
-    label={lst:condicionaldereceberusodememoria}
-    ]{algoritmos/condicionaldereceberusodememoria.kt}
-
-Nesse contexto, o aplicativo interpreta os bytes seguintes como valores numéricos que representam, respectivamente, a parte inteira e a parte decimal da porcentagem. Esses valores são somados após a conversão para o formato numérico adequado, resultando em um valor final com duas casas decimais (\autoref{lst:condicionaldereceberusodememoria}). Esse número é então utilizado para atualizar a interface do usuário com a informação atualizada sobre o consumo de memória do dispositivo.
+Nesse contexto, o aplicativo interpreta os bytes seguintes como valores numéricos que representam, respectivamente, a parte inteira e a parte decimal da porcentagem. Esses valores são somados após a conversão para o formato numérico adequado, resultando em um valor final com duas casas decimais. Esse número é então utilizado para atualizar a interface do usuário com a informação atualizada sobre o consumo de memória do dispositivo.
 
 Além da extração dos dados de uso de memória, o recebimento do identificador 255 também aciona uma função interna responsável por sinalizar a chegada do \textit{heartbeat}. Esse mecanismo funciona como um pulso periódico enviado pelo firmware, cuja função principal é indicar que o dispositivo segue ativo e em comunicação com o aplicativo. No aplicativo, esse pulso ativa um recurso visual na interface: uma indicação em forma de círculo que pisca a cada novo recebimento. Esse indicador atua como um monitor de conexão em tempo real, permitindo ao usuário verificar de forma intuitiva se a comunicação Bluetooth está estável. Caso o pulso deixe de ser recebido por um intervalo prolongado, o usuário deve observar que ocorreu a perda de sinal ou falha de comunicação, evitando a falsa impressão de que o sistema permanece operacional quando, na verdade, pode estar congelado ou desconectado.
 
@@ -56,7 +51,7 @@ Além da leitura, o sistema também permite a atualização desses parâmetros v
 
 A lógica geral de carregamento e persistência dos parâmetros é representada na \autoref{fig:fluxoparametros}, que ilustra o fluxo completo de inicialização e atualização dos dados operacionais do malteador.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \caption{Fluxo de inicialização e atualização dos parâmetros de malteação.}
     \label{fig:fluxoparametros}
@@ -79,7 +74,7 @@ As Tabelas~\ref{tab:coefmac}, \ref{tab:coefgerm} e \ref{tab:coefsec} apresentam 
 
 Esse mesmo modelo é utilizado na conversão inversa, durante a serialização dos dados antes da transmissão, garantindo consistência entre os módulos do firmware e do aplicativo.
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Coeficientes de reconstrução — Etapa de Maceração}
     \label{tab:coefmac}
     \centering
@@ -97,7 +92,7 @@ Esse mesmo modelo é utilizado na conversão inversa, durante a serialização d
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Coeficientes de reconstrução — Etapa de Germinação}
     \label{tab:coefgerm}
     \centering
@@ -115,7 +110,7 @@ Esse mesmo modelo é utilizado na conversão inversa, durante a serialização d
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Coeficientes de reconstrução — Etapa de Secagem}
     \label{tab:coefsec}
     \centering
@@ -133,7 +128,7 @@ Esse mesmo modelo é utilizado na conversão inversa, durante a serialização d
 
 Na \autoref{tab:parametros}, são listados todos os parâmetros disponíveis no sistema, acompanhados de suas respectivas faixas de valores operacionais, definidas conforme os limites estabelecidos.
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Faixa de valores possíveis para cada parâmetro.}
     \label{tab:parametros}
     \centering
@@ -182,7 +177,7 @@ Cada ciclo da maceração é formado por quatro subetapas executadas sequencialm
 
 Essas fases são repetidas conforme o número de ciclos configurado pelo usuário. A execução da etapa de maceração pode ser representada de forma resumida na Tabela~\ref{tab:maceracao-fluxo}.
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Fluxo de controle da etapa de maceração}
     \label{tab:maceracao-fluxo}
     \centering
@@ -220,7 +215,7 @@ A etapa de germinação (\textit{germination}) mantém a estrutura introduzida n
 
 Essas tarefas compartilham uma variável de sinalização comum, que permite a interrupção imediata da etapa caso o processo seja cancelado via aplicativo. A Tabela~\ref{tab:germinacao_fluxo} resume a lógica operacional da etapa de germinação.
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Fluxo de controle da etapa de germinação.}
     \label{tab:germinacao_fluxo}
     \centering
@@ -240,7 +235,7 @@ Essas tarefas compartilham uma variável de sinalização comum, que permite a i
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{table}
 
-A umidificação periódica dos grãos é feita por meio de ciclos adicionam de água. O algoritmo alterna entre a abertura de válvulas para umidificar o ambiente e pausas programadas para não encharcar os grãos. Essa tarefa permanece ativa enquanto o estágio estiver em execução, repetindo os ciclos conforme o necessário. O controle de temperatura segue o mesmo princípio adotado na etapa anterior, sendo executado como tarefa independente que verifica periodicamente o estado do sistema, permitindo ajustes térmicos futuros.
+A umidificação periódica dos grãos é feita por meio de ciclos de adição de água. O algoritmo alterna entre a abertura de válvulas para umidificar o ambiente e pausas programadas para não encharcar os grãos. Essa tarefa permanece ativa enquanto o estágio estiver em execução, repetindo os ciclos conforme o necessário. O controle de temperatura segue o mesmo princípio adotado na etapa anterior, sendo executado como tarefa independente que verifica periodicamente o estado do sistema, permitindo ajustes térmicos futuros.
 
 O reservatório de água do protótipo foi planejado para suportar 5 litros, estima-se que este valor seja suficiente para o processo. Apesar disso, caso seja necessário, a implementação de um sensor de distância ultrassom para acompanhamento do nível do tanque será simples dada a arquitetura do firmware. 
 
@@ -252,7 +247,7 @@ Encerrada a germinação, inicia-se a última etapa do processo: a secagem (\tex
 
 A Tabela~\ref{tab:secagem_fluxo} detalha o fluxo operacional da etapa de secagem:
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Fluxo de controle da etapa de secagem}
     \label{tab:secagem_fluxo}
     \centering
@@ -282,7 +277,7 @@ A estrutura assíncrona aplicada em todas as etapas da malteação permite ao si
 
 Nesta implementação, foram utilizados dois sensores, ambos com arquitetura baseada no protocolo I\textsuperscript{2}C responsáveis pela aquisição de dados para o processo:
 
-\begin{table}[ht]
+\begin{table}[H]
     \caption{Especificação dos sensores}
     \label{tab:sensores_atuadores}
     \centering
@@ -290,7 +285,7 @@ Nesta implementação, foram utilizados dois sensores, ambos com arquitetura bas
         \hline
         \textbf{Sensor} & \textbf{Parâmetros} & \textbf{Função no processo} \\
         \hline
-        AHT20 & Temperatura e umidade relativa & Monitoramento contínuo das condições ambientais durante todas as etapas da malteação \\
+        AH20 & Temperatura e umidade relativa & Monitoramento contínuo das condições ambientais durante todas as etapas da malteação \\
         ENS160 & eCO\textsubscript{2} (equivalente de CO\textsubscript{2}) & Detecção e monitoramento da atividade metabólica dos grãos na fase de germinação \\
         \hline
     \end{tabular}
@@ -302,15 +297,9 @@ A leitura dos sensores ocorre de maneira contínua e assíncrona na tarefa \text
 
 O tratamento de falhas também foi considerado: caso a leitura de qualquer sensor falhe, o sistema atribui valor zero como padrão, garantindo que o fluxo da comunicação continue sem interrupções.
 
-Em paralelo à leitura de sensores, o sistema também gerencia cinco atuadores principais: duas válvulas (entrada e saída de água), um motor de rotação, uma resistência térmica e uma bomba de ar. A lógica de controle desses dispositivos é encapsulada na classe \texttt{Actuator} (\autoref{lst:actuator}), desenvolvida para simplificar a manipulação dos pinos GPIO e abstrair as diferenças de lógica de acionamento.
+Em paralelo à leitura de sensores, o sistema também gerencia cinco atuadores principais: duas válvulas (entrada e saída de água), um motor de rotação, uma resistência térmica e uma bomba de ar. A lógica de controle desses dispositivos é encapsulada na classe \texttt{Actuator}, desenvolvida para simplificar a manipulação dos pinos GPIO e abstrair as diferenças de lógica de acionamento.
 
-\lstinputlisting[
-    language=Python,
-    caption=Classe Actuator - MicroPython,
-    label={lst:actuator}
-    ]{algoritmos/actuator.py} 
-
-Cada atuador é instanciado em \texttt{actuators} com seu respectivo nome e número de pino, e armazenado em um dicionário global para facilitar o acesso dinâmico por outras partes do sistema. A classe (\autoref{lst:actuator}) disponibiliza métodos como \texttt{on()}, \texttt{off()} e \texttt{toggle()}, além de uma função de verificação de estado atual. Dessa forma, o acionamento de cada dispositivo torna-se simples, confiável e rastreável (via terminal).
+Cada atuador é instanciado em \texttt{actuators} com seu respectivo nome e número de pino, e armazenado em um dicionário global para facilitar o acesso dinâmico por outras partes do sistema. A classe disponibiliza métodos como \texttt{on()}, \texttt{off()} e \texttt{toggle()}, além de uma função de verificação de estado atual. Dessa forma, o acionamento de cada dispositivo torna-se simples, confiável e rastreável (via terminal).
 
 Além do controle direto, foi implementada uma função de envio do estado atual dos atuadores via Bluetooth, permitindo que o aplicativo visualize, em tempo real, quais dispositivos estão ativos no momento.
 
@@ -319,7 +308,7 @@ Além do controle direto, foi implementada uma função de envio do estado atual
 \subsection{Tela Inicial: Conexão}\label{subsec:conexao}
 Ao inicializar o aplicativo, o usuário é direcionado à interface de conexão. Nesta tela, é exibido centralmente o status "Não conectado", acompanhado de um indicador de estado pulsante no canto superior direito, que alterna entre azul e cinza a cada segundo, quando conectado. A conexão com o dispositivo ESP32, previamente pareado via Bluetooth, é estabelecida mediante acionamento do botão "Conectar", conforme ilustrado na \autoref{fig:int-inicial}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \caption{Interface inicial do aplicativo.}
     \label{fig:int-inicial}
     \centering
@@ -344,7 +333,7 @@ Ainda, na estrutura geral do \textit{Scaffold} (layout do aplicativo), destaca-s
 
 No canto superior esquerdo, o botão de navegação proporciona acesso ao \textit{Drawer}, um painel lateral com duas opções: "Início" (retorno à tela principal) e "Configurações" (\autoref{fig:drawer}). A tela de configurações, em sua versão atual, permite a alternância entre temas claro e escuro (\autoref{fig:int-inicial}), com previsão de expansão para personalizações avançadas, como definição de nomes de dispositivos e ajustes dos valores de UUID Bluetooth.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \caption{Drawer do aplicativo.}
     \label{fig:drawer}
     \centering
@@ -359,9 +348,9 @@ No canto superior esquerdo, o botão de navegação proporciona acesso ao \texti
   \end{figure}
 
 \subsection{Tela de Parâmetros}\label{subsec:parametros}
-A interface de parâmetros opera em dois modos distintos, conforme o estado de conexão. No modo desconectado (\autoref{fig:par-off}), os campos de entrada permanecem inativos. Quando conectado, os campos assumem codificação cromática dinâmica: tonalidade amarela para indicar valores não sincronizados ou nulos, e azul para valores válidos sincronizados com o ESP32 (\autoref{fig:parameters-state}). Valores fora da faixa operacional (\autoref{{tab:parametros}}) ou inconsistentes geram feedback visual impedindo o envio (\autoref{fig:parameters-state}), previnindo possíveis erros de extrapolação dos bytes na comunicação Bluetooth.
+A interface de parâmetros opera em dois modos distintos, conforme o estado de conexão. No modo desconectado (\autoref{fig:par-off}), os campos de entrada permanecem inativos. Quando conectado, os campos assumem codificação cromática dinâmica: tonalidade amarela para indicar valores não sincronizados ou nulos, e azul para valores válidos sincronizados com o ESP32 (\autoref{fig:parameters-state}). Valores fora da faixa operacional (\autoref{tab:parametros}) ou inconsistentes geram feedback visual impedindo o envio (\autoref{fig:parameters-state}), previnindo possíveis erros de extrapolação dos bytes na comunicação Bluetooth.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \caption{Tela de parâmetros em modo desconectado com campos inativos.}
     \label{fig:par-off}
@@ -370,7 +359,7 @@ A interface de parâmetros opera em dois modos distintos, conforme o estado de c
     {\centering\footnotesize Fonte: Autoria própria.\par}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \caption{Estados dos campos de parâmetros.}
     \label{fig:parameters-state}
     \centering
@@ -390,8 +379,8 @@ A interface de parâmetros opera em dois modos distintos, conforme o estado de c
 
 Para melhor experiência do usuário/operador, o sistema permite o armazenamento das configurações atuais de parâmetros como perfis personalizados ("receitas"), mediante nomeação em diálogo dedicado (\autoref{fig:select-save-recipe}). Essas receitas podem ser recuperadas através do menu do FAB, que exibe uma lista de opções salvas.
 
-\begin{figure}[ht]
-    \caption{Salvamento e seleção de receitas.}
+\begin{figure}[H]
+    \caption{Salvamento e seleção de receitas}
     \label{fig:select-save-recipe}
     \centering
     \subfloat[Botão de salvamento de receitas\label{fig:save-recipe}]{\includegraphics[width=0.32\textwidth]{save-recipe.jpeg}}
@@ -408,27 +397,33 @@ Para melhor experiência do usuário/operador, o sistema permite o armazenamento
 \subsection{Telas de Monitoramento: Sensores e Atuadores}\label{subsec:monitoramento}
 As telas de sensores (\autoref{fig:sensors}) e atuadores (\autoref{fig:actuators}) cumprem função de monitoramento passivo, sem permitir interações diretas. A primeira exibe dados em tempo real de temperatura, umidade e concentração de CO$_2$, enquanto a segunda apresenta o estado operacional dos componentes físicos (válvulas, resistência, bomba de ar), com indicadores \textit{ON/OFF} gráficos. Ambas integram-se à \textit{BottomAppBar}, mantendo coerência na navegação e permitindo rápida alternância entre telas.
 
-\begin{figure}[ht]
-    \caption{Interface de sensores.}
+\begin{figure}[H]
+    \caption{Interface de sensores}
     \label{fig:sensors}
     \centering
+    \hfill
     \subfloat[Interface de sensores em modo desconectado\label{fig:sensores-off}]{\includegraphics[width=0.3\textwidth]{sensores-off.png}}
     \hfill
     \subfloat[Interface de sensores em modo conectado\label{fig:sensores-on}]{\includegraphics[width=0.3\textwidth]{sensores-on.png}}
     \hfill
+    \hfill
+
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 
   \end{figure}
 
-  \begin{figure}[ht]
+  \begin{figure}[H]
     \caption{Interface de atuadores.}
     \label{fig:actuators}
     \centering
+    \hfill
     \subfloat[Estado dos atuadores em modo desconectado\label{fig:atuador-off}]{\includegraphics[width=0.3\textwidth]{atuador-off.png}}
     \hfill
     \subfloat[Interface de atuadores em modo conectado\label{fig:atuador-on}]{\includegraphics[width=0.3\textwidth]{atuador-on.png}}
     \hfill
+    \hfill
+
 
     {\centering\footnotesize Fonte: Autoria própria.\par}
 
@@ -436,25 +431,25 @@ As telas de sensores (\autoref{fig:sensors}) e atuadores (\autoref{fig:actuators
 
 \section{Limitações e trabalhos futuros}
 
-Embora a arquitetura de software esteja praticamente pronta, o presente trabalho apresenta limitações no que diz respeito à validação prática do sistema. O protótipo físico desenvolvido anteriormente, durante a IC, permanece incompleto em sua estrutura elétrica e nos componentes de automação, o que inviabilizou a realização de testes físicos com os controles implementados.
+Embora a base dos \textit{softwares} estejam prontas, o presente trabalho apresenta limitações no que diz respeito à validação prática do sistema. O protótipo físico desenvolvido anteriormente, durante a IC, permanece incompleto em sua estrutura elétrica e nos componentes de automação, o que inviabilizou a realização de testes físicos com os controles implementados.
   
-Como consequência, os testes foram realizados sem a ativação real dos atuadores. Os sensores AHT20 e ENS160 foram conectados ao sistema e realizaram leituras ambientais reais 
-% (\autoref{fig:protoboard})
-. O comportamento do código foi verificado por meio de mensagens no terminal, confirmando que os trechos responsáveis pelo acionamento de dispositivos estão sendo corretamente executados. Essa abordagem teve como objetivo validar a lógica de controle assíncrona e a estabilidade da comunicação via Bluetooth. A simulação demonstrou-se eficaz para comprovar o funcionamento da arquitetura em condições normais de operação.
-  
-% \begin{figure}[ht]
-%     \centering
-%     \caption{Protoboard montada com o (A) ESP32-C3 e (B) os sensores AHT20+ENS160 para validação das leituras.}
-%     \label{fig:protoboard}
-%     \includegraphics[width=0.8\textwidth]{protoboard.png}
+Como alternativa, recorreu-se à utilização do módulo de testes, o qual simulou os ciclos do processo com base na lógica implementada no \textit{firmware} (\texttt{v1.0-sim}) e no aplicativo (\texttt{v1.0}). A simulação permitiu validar o comportamento geral do sistema em condições normais de operação, com destaque para a lógica de controle assíncrona e a estabilidade da comunicação Bluetooth. A \autoref{fig:simulacaorodando} ilustra um momento da simulação em que o LED da porta 8 está aceso, indicando a ativação da saída responsável pela resistência, conforme a Tabela~\ref{tab:atuadores}.
 
-%     {\centering\footnotesize Fonte: Autoria própria.\par}
-%   \end{figure}
-  
-Para trabalhos futuros, recomenda-se:
+\begin{figure}[H]
+    \centering
+    \caption{Quadro do vídeo da simulação realizada}
+    \label{fig:simulacaorodando}
+    \includegraphics[width=0.9\textwidth]{simulacao-rodando.png}
+
+    {\centering\footnotesize Fonte: Autoria própria.\par}
+\end{figure}
+
+Esta simulação não contou com leitura de sensores. Porém, em outros testes realizados, os sensores AH20 e ENS160 foram conectados ao sistema e realizaram leituras ambientais reais. Validando as lógicas associadas aos sensores.
+
+Por fim, para trabalhos futuros, recomenda-se:
   
   \begin{itemize}
       \item Finalização do protótipo físico com sensores e atuadores totalmente integrados;
       \item Avaliação da eficiência do sistema em testes com diferentes perfis de malteação;
-      \item Implementação de novos recursos, como controle de torrefação e exportação de dados históricos.
+      \item Implementação de novos recursos, como adição de um programa de torrefação e exportação de dados históricos.
   \end{itemize}
